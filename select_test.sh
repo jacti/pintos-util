@@ -34,6 +34,27 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # 프로젝트 루트에서 Pintos 환경 활성화
 source "${SCRIPT_DIR}/../activate"
 
+# --------------------------------------------------
+# .test_config 읽어서 tests 배열과 config_map 생성
+# 형식: 테스트이름: 실행인자 (’--' 포함)
+# --------------------------------------------------
+CONFIG_FILE="${SCRIPT_DIR}/.test_config"
+if [[ ! -f "$CONFIG_FILE" ]]; then
+  echo "Error: .test_config 파일이 없습니다: ${CONFIG_FILE}" >&2
+  exit 1
+fi
+
+declare -A config_map
+tests=()
+
+while IFS=':' read -r test args; do
+  [[ -z "${test// /}" || "${test// /}" == \#* ]] && continue
+  test="$(echo "$test" | xargs)"
+  args="$(echo "$args" | xargs)"
+  config_map["$test"]="$args"
+  tests+=("$test")
+done < "$CONFIG_FILE"
+
 # 1) build/ 폴더가 없으면 무조건 처음 빌드
 if [[ ! -d "${SCRIPT_DIR}/build" ]]; then
   echo "Build directory not found. Building Pintos threads..."
@@ -55,37 +76,6 @@ if [[ -f "$STATE_FILE" ]]; then
     status_map["$test"]="$stat"
   done < "$STATE_FILE"
 fi
-
-# 가능한 Pintos 테스트 목록
-tests=(
-  alarm-single
-  alarm-multiple
-  alarm-simultaneous
-  alarm-priority
-  alarm-zero
-  alarm-negative
-  priority-change
-  priority-donate-one
-  priority-donate-multiple
-  priority-donate-multiple2
-  priority-donate-nest
-  priority-donate-sema
-  priority-donate-lower
-  priority-fifo
-  priority-preempt
-  priority-sema
-  priority-condvar
-  priority-donate-chain
-  mlfqs-load-1
-  mlfqs-load-60
-  mlfqs-load-avg
-  mlfqs-recent-1
-  mlfqs-fair-2
-  mlfqs-fair-20
-  mlfqs-nice-2
-  mlfqs-nice-10
-  mlfqs-block
-)
 
 echo "=== Available Pintos Tests ==="
 for i in "${!tests[@]}"; do
@@ -137,42 +127,58 @@ failed=()
 {
   cd "${SCRIPT_DIR}/build" || exit 1
 
+  outdir="tests/threads"
+  mkdir -p "${outdir}"
+
   count=0
   total=${#sel_tests[@]}
   for test in "${sel_tests[@]}"; do
     echo
+    # config에서 전체 args 가져오기
+    args_full="${config_map[$test]}"      # ex: "-mlfqs -- -q" 또는 "-- -q"
+    
+    # “--” 앞뒤로 나누기
+    kernel_args="$(echo "${args_full%%--*}" | xargs)"   # ex: "-mlfqs" 또는 ""
+    run_args="$(echo "${args_full##*--}" | xargs)"   # ex: "-q"
+
     if [[ "$MODE" == "-q" ]]; then
-      # batch 모드: make 타겟으로 .result 생성
+      # 배치 모드
+      cmd="pintos ${kernel_args:+${kernel_args}} -- ${run_args} run ${test}"
+      make_cmd="make -s tests/threads/${test}.result ARGS=\"${kernel_args:+${kernel_args}} -- ${run_args}\""
       echo -n "Running ${test} in batch mode... "
-      if make -s "tests/threads/${test}.result"; then
-        if grep -q '^PASS' "tests/threads/${test}.result"; then
+      echo "\$ ${cmd}  # in batch mode"
+      echo
+      # batch 모드: ARGS 전달
+      if make -s tests/threads/${test}.result \
+            ARGS="${kernel_args:+${kernel_args}} -- ${run_args}"; then
+        # make가 성공했으면 .result 안에 PASS 키워드 검사
+        if grep -q '^PASS' tests/threads/${test}.result; then
           echo "PASS"; passed+=("$test")
         else
           echo "FAIL"; failed+=("$test")
         fi
       else
-        echo "ERROR"; failed+=("$test")
-      fi
+        # make가 실패했어도 그냥 FAIL로 처리
+        echo "FAIL"; failed+=("$test")
+fi
     else
       # interactive debug 모드: QEMU 포그라운드 실행 + tee 로 .output 캡처 후 .result 생성
-      outdir="tests/threads"
-      mkdir -p "${outdir}"
-
       echo -e "=== Debugging \e[33m${test}\e[0m ($(( count + 1 ))/${total}) ==="
+      echo -e "\e[33mVSCode의 \"Pintos Debug\" 디버그를 시작하세요.\e[0m"
       echo " * QEMU 창이 뜨고, gdb stub은 localhost:1234 에서 대기합니다."
       echo " * 내부 출력은 터미널에 보이면서 '${outdir}/${test}.output'에도 저장됩니다."
       echo
 
-      # 터미널과 파일로 동시에 출력
-      pintos --gdb -- -q run "${test}" 2>&1 | tee "${outdir}/${test}.output" 
+      cmd="pintos --gdb ${kernel_args:+${kernel_args}} -- ${run_args} run ${test}"
+      echo "\$ ${cmd}"
+      eval "${cmd}" 2>&1 | tee "${outdir}/${test}.output"
 
       # 종료 후 체크 스크립트로 .result 생성
       repo_root="${SCRIPT_DIR}/.."   # 리포지터리 루트(pintos/) 경로
       ck="${repo_root}/tests/threads/${test}.ck"
       if [[ -f "$ck" ]]; then
-      # -I 로 repo root를 @INC 에 추가해야 tests/tests.pm 을 찾습니다.
-      perl -I "${repo_root}" \
-           "$ck" "${outdir}/${test}" "${outdir}/${test}.result"
+        perl -I "${repo_root}" \
+             "$ck" "${outdir}/${test}" "${outdir}/${test}.result"
         if grep -q '^PASS' "${outdir}/${test}.result"; then
           echo "=> PASS"; passed+=("$test")
         else
@@ -198,18 +204,14 @@ for t in "${passed[@]}"; do echo "  - $t"; done
 echo "Failed: ${#failed[@]}"
 for t in "${failed[@]}"; do echo "  - $t"; done
 
-# 이번에 PASS 된 테스트만 덮어쓰기
+# 5) 상태 파일에 PASS/FAIL 기록 (untested는 기록하지 않음)
 for t in "${passed[@]}"; do
   status_map["$t"]="PASS"
 done
-
-# 이번에 FAIL 된 테스트만 덮어쓰기
 for t in "${failed[@]}"; do
   status_map["$t"]="FAIL"
 done
 
-
-# 5) 상태 파일에 PASS/FAIL 기록 (untested는 기록하지 않음)
 > "$STATE_FILE"
 for test in "${!status_map[@]}"; do
   echo "$test ${status_map[$test]}"
