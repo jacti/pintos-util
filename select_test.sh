@@ -44,14 +44,17 @@ if [[ ! -f "$CONFIG_FILE" ]]; then
   exit 1
 fi
 
-declare -A config_map
+declare -A config_args   # 실행 인자
+declare -A config_result # 결과 파일 경로
 tests=()
 
-while IFS=':' read -r test args; do
+while IFS=':' read -r test args result_dir; do
   [[ -z "${test// /}" || "${test// /}" == \#* ]] && continue
   test="$(echo "$test" | xargs)"
   args="$(echo "$args" | xargs)"
-  config_map["$test"]="$args"
+  result_dir="$(echo "$result_dir" | xargs)"
+  config_result["$test"]="$result_dir"
+  config_args["$test"]="$args"
   tests+=("$test")
 done < "$CONFIG_FILE"
 
@@ -127,32 +130,34 @@ failed=()
 {
   cd "${SCRIPT_DIR}/build" || exit 1
 
-  outdir="tests/threads"
-  mkdir -p "${outdir}"
-
   count=0
   total=${#sel_tests[@]}
   for test in "${sel_tests[@]}"; do
     echo
     # config에서 전체 args 가져오기
-    args_full="${config_map[$test]}"      # ex: "-mlfqs -- -q" 또는 "-- -q"
+    args_full="${config_args[$test]}"      # ex: "-mlfqs -- -q" 또는 "-- -q"
     
     # “--” 앞뒤로 나누기
     kernel_args="$(echo "${args_full%%--*}" | xargs)"   # ex: "-mlfqs" 또는 ""
     run_args="$(echo "${args_full##*--}" | xargs)"   # ex: "-q"
+    dir="${config_result[$test]}"
+    res="${dir}/${test}.result"
+    # ck= "${dir}/${test}.ck"
 
+    mkdir -p ${dir}
+    
     if [[ "$MODE" == "-q" ]]; then
       # 배치 모드
       cmd="pintos ${kernel_args:+${kernel_args}} -- ${run_args} run ${test}"
-      make_cmd="make -s tests/threads/${test}.result ARGS=\"${kernel_args:+${kernel_args}} -- ${run_args}\""
-      echo -n "Running ${test} in batch mode... "
+      make_cmd="make -s ${res} ARGS=\"${kernel_args:+${kernel_args}} -- ${run_args}\""
+      echo "Running ${test} in batch mode... "
       echo "\$ ${cmd}  # in batch mode"
       echo
       # batch 모드: ARGS 전달
-      if make -s tests/threads/${test}.result \
+      if make -s ${res} \
             ARGS="${kernel_args:+${kernel_args}} -- ${run_args}"; then
         # make가 성공했으면 .result 안에 PASS 키워드 검사
-        if grep -q '^PASS' tests/threads/${test}.result; then
+        if grep -q '^PASS' ${res}; then
           echo "PASS"; passed+=("$test")
         else
           echo "FAIL"; failed+=("$test")
@@ -166,20 +171,20 @@ fi
       echo -e "=== Debugging \e[33m${test}\e[0m ($(( count + 1 ))/${total}) ==="
       echo -e "\e[33mVSCode의 \"Pintos Debug\" 디버그를 시작하세요.\e[0m"
       echo " * QEMU 창이 뜨고, gdb stub은 localhost:1234 에서 대기합니다."
-      echo " * 내부 출력은 터미널에 보이면서 '${outdir}/${test}.output'에도 저장됩니다."
+      echo " * 내부 출력은 터미널에 보이면서 '${dir}/${test}.output'에도 저장됩니다."
       echo
 
       cmd="pintos --gdb ${kernel_args:+${kernel_args}} -- ${run_args} run ${test}"
       echo "\$ ${cmd}"
-      eval "${cmd}" 2>&1 | tee "${outdir}/${test}.output"
+      eval "${cmd}" 2>&1 | tee "${dir}/${test}.output"
 
       # 종료 후 체크 스크립트로 .result 생성
       repo_root="${SCRIPT_DIR}/.."   # 리포지터리 루트(pintos/) 경로
-      ck="${repo_root}/tests/threads/${test}.ck"
+      ck="${repo_root}/${dir}/${test}.ck"
       if [[ -f "$ck" ]]; then
         perl -I "${repo_root}" \
-             "$ck" "${outdir}/${test}" "${outdir}/${test}.result"
-        if grep -q '^PASS' "${outdir}/${test}.result"; then
+             "$ck" "${dir}/${test}" "${dir}/${test}.result"
+        if grep -q '^PASS' "${dir}/${test}.result"; then
           echo "=> PASS"; passed+=("$test")
         else
           echo "=> FAIL"; failed+=("$test")
