@@ -1,8 +1,10 @@
-# [Pintos] vscode 디버그 연동 v 1.1.0
+# [Pintos] vscode 디버그 연동 v 1.2.0
 
-다시 돌아온 편의성 아저씹니다.
+Week 9 User Program에 맞추어 새롭게 돌아온 편의성 패치 아저씹니다.
 
-핀토스 코드는 짰는데 make check 말고는 어떻게 테스트 돌려야할지도 모르겠고 한줄한줄 디버깅 하고 싶은데 어떻게 해야할지 막막한 그 상황 한방에 해결해 드립니다.
+새로운 파일을 userprog 폴더에 넣어주면 동작합니다.
+
+* 테스트케이스를 그룹으로 정리해서 볼 수 있습니다.
 
 # 세팅
 
@@ -15,25 +17,24 @@
 [.test._config](/.test_config)
 
 - select_test.sh
-    - `pintos/threads` 폴더에 넣어줍니다.
-        - [주의] threads 폴더가 프로젝트 하위에 많습니다. (ex. `test/threads`) 우리가 작업하는 `threads.c`가 있는 그 위치에 넣어줍니다.
+    - `pintos/userprog` 폴더에 넣어줍니다.
     - 권한 부여
         
         ```bash
-        # threads 폴더로 이동한 후
+        # userprog 폴더로 이동한 후
         chmod +x ./select_test.sh
         ```
 
 - .test_config
-    - `pintos/threads` 폴더에 넣어줍니다.
+    - `pintos/userprog` 폴더에 넣어줍니다.
         
 - launch.json
     - 프로젝트 루트 `.vscode` 폴더 에 넣어줍니다.
     - 경로 수정
         - `${workspaceFolder}` 는 vscode에서 열린 작업공간의 루트 폴더입니다.
         - `“program”` 필드의 값이 자신의 kernel.o 파일과 일치하는지 확인합니다.
-            - threads 하위 build 폴더가 안보이면 threads 폴더에서 make 명령어를 실행하면 생깁니다.
-        - `“cwd”` 필드의 값이 자신의 threads 폴더 경로와 일치하는지 확인합니다.
+            - userprog 하위 build 폴더가 안보이면 userprog 폴더에서 make 명령어를 실행하면 생깁니다.
+        - `“cwd”` 필드의 값이 자신의 userprog 폴더 경로와 일치하는지 확인합니다.
         - `“miDebuggerPath”`가 자신의 gdb 경로와 맞는지 확인합니다.
             - gdb 경로 확인법
                 
@@ -91,7 +92,7 @@ ex. 1-5 9 11-13 ⇒ {1, 2, 3, 4, 5, 9, 11, 13} 번 테스트를 진행합니다.
 ### vscode로 디버깅을 하고 싶을 때
 
 1. 디버깅할 위치에 중단점을 찍습니다
-2. 아래 명령어를 threads 폴더에서 실행
+2. 아래 명령어를 userprog 폴더에서 실행
 
 ```bash
 # gdb에서 따와서 -g 옵션입니다
@@ -145,14 +146,28 @@ ex. 1-5 9 11-13 ⇒ {1, 2, 3, 4, 5, 9, 11, 13} 번 테스트를 진행합니다.
 
 ### 저장해둔 테스트 통과 결과를 리셋하고 싶을 때
 
-`./threads/.test_status` 파일을 삭제합니다.
+`./userprog/.test_status` 파일을 삭제합니다.
 
 ## .test_config
 
-- 테스트케이스별 줄 옵션을 변경할 수 있습니다.
-- [테스트케이스] : [qemu옵션] — [핀토스옵션] : [result 파일 경로] 형태로 구성되어 있습니다.
+- 테스트케이스별 전달할 옵션을 변경할 수 있습니다.
+    - [테스트케이스] : [qemu옵션] — [핀토스옵션] : [result 파일 경로] 형태로 구성되어 있습니다.
+    -> 옵션 부분을 수정하여 전달할 옵션을 변경할 수 있습니다.
+
+- 테스트케이스를 그룹화 할 수 있습니다.
+    - 테스트 케이스들 앞에 [그룹명]을 적으면 해당 그룹으로 그룹화 되어 출력됩니다.
+
+    <p align="center">
+    <img src="https://github.com/user-attachments/assets/22b4bf68-9cd1-4b74-8c82-9600188f2171" width="300" alt=".test_config" />
+    <img src="https://github.com/user-attachments/assets/8bcb7747-4ef3-4192-ae21-ad2defd80fcc" width="300" alt="출력 예시" />
+    </p>
+    
 
 # 업데이트 로그
+
+- v1.2.0
+    - test case 그룹화 기능 추가
+    - user program 용 .test_config 배포
 
 - v1.1.0
     - .test_config 파일 추가

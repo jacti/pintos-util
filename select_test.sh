@@ -29,7 +29,7 @@ if (( $# == 2 )); then
   fi
 fi
 
-# 스크립트 자신이 있는 디렉터리 (src/threads/)
+# 스크립트 자신이 있는 디렉터리 (usrprog/)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # 프로젝트 루트에서 Pintos 환경 활성화
 source "${SCRIPT_DIR}/../activate"
@@ -46,27 +46,58 @@ fi
 
 declare -A config_args   # 실행 인자
 declare -A config_result # 결과 파일 경로
+declare -A GROUP_TESTS TEST_GROUP MENU_TESTS
+declare -a ORDERED_GROUPS
 tests=()
 
-while IFS=':' read -r test args result_dir; do
-  [[ -z "${test// /}" || "${test// /}" == \#* ]] && continue
-  test="$(echo "$test" | xargs)"
-  args="$(echo "$args" | xargs)"
-  result_dir="$(echo "$result_dir" | xargs)"
-  config_result["$test"]="$result_dir"
-  config_args["$test"]="$args"
-  tests+=("$test")
+# --- 섹션과 테스트 라인 함께 파싱 ---
+declare -a ORDERED_GROUPS
+current_group=""
+
+while IFS= read -r raw; do
+  # 주석 제거, 앞뒤 공백 trim
+  line="${raw%%\#*}"
+  line="$(echo "$line" | xargs)"
+  [[ -z "$line" ]] && continue
+
+  if [[ "$line" =~ ^\[(.+)\]$ ]]; then
+    # [group] 섹션 헤더
+    current_group="${BASH_REMATCH[1]}"
+    ORDERED_GROUPS+=("$current_group")
+    GROUP_TESTS["$current_group"]=""
+  else
+    # test: args : result_dir
+    IFS=':' read -r test args result_dir <<< "$line"
+    test="$(echo "$test"       | xargs)"
+    args="$(echo "$args"       | xargs)"
+    result_dir="$(echo "$result_dir" | xargs)"
+
+    config_args["$test"]="$args"
+    config_result["$test"]="$result_dir"
+    tests+=("$test")
+
+    # 그룹에 추가
+    TEST_GROUP["$test"]="$current_group"
+    GROUP_TESTS["$current_group"]+="$test "
+  fi
 done < "$CONFIG_FILE"
+
+# --- 그룹별 테스트 모음 생성 ---
+for test in "${tests[@]}"; do
+  grp="${config_result[$test]}"
+  GROUP_TESTS["$grp"]+="$test "
+done
+
 
 # 1) build/ 폴더가 없으면 무조건 처음 빌드
 if [[ ! -d "${SCRIPT_DIR}/build" ]]; then
-  echo "Build directory not found. Building Pintos threads..."
+  echo "Build directory not found. Building Pintos userprog..."
   make -C "${SCRIPT_DIR}" clean all
 fi
 
 # 2) -r 옵션이 있으면 clean & rebuild
 if (( REBUILD )); then
-  echo "Force rebuilding Pintos threads..."
+  echo "Force rebuilding Pintos userprog..."
   make -C "${SCRIPT_DIR}" clean all
 fi
 
@@ -81,18 +112,26 @@ if [[ -f "$STATE_FILE" ]]; then
 fi
 
 echo "=== Available Pintos Tests ==="
-for i in "${!tests[@]}"; do
-  idx=$((i+1))
-  test="${tests[i]}"
-  stat="${status_map[$test]:-untested}"
-  # 색 결정: PASS=녹색, FAIL=빨강, untested=기본
-  case "$stat" in
-    PASS) color="\e[32m" ;;
-    FAIL) color="\e[31m" ;;
-    *)    color="\e[0m"  ;;
-  esac
-  printf " ${color}%2d) %s\e[0m\n" "$idx" "$test"
+index=1
+for grp in "${ORDERED_GROUPS[@]}"; do
+  tests_in_grp="${GROUP_TESTS[$grp]}"
+  [[ -z "$tests_in_grp" ]] && continue
+
+  echo
+  echo "▶ ${grp^} tests:"
+  for test in $tests_in_grp; do
+    stat="${status_map[$test]:-untested}"
+    case "$stat" in
+      PASS) color="\e[32m" ;;
+      FAIL) color="\e[31m" ;;
+      *)    color="\e[0m"  ;;
+    esac
+    printf "  ${color}%2d) %s\e[0m\n" "$index" "$test"
+    MENU_TESTS[$index]="$test"
+    ((index++))
+  done
 done
+
 
 # 2) 사용자 선택 (여러 개 / 범위 허용)
 read -p "Enter test numbers (e.g. '1 3 5' or '2-4'): " input
@@ -112,9 +151,9 @@ sel_tests=()
 for n in "${tokens[@]}"; do
   if [[ "$n" =~ ^[0-9]+$ ]] && (( n>=1 && n<=${#tests[@]} )); then
     idx=$((n-1))
-    if [[ -z "${seen[$idx]}" ]]; then
-      sel_tests+=("${tests[idx]}")
-      seen[$idx]=1
+    if [[ -z "${seen[$n]}" ]]; then
+      sel_tests+=("${MENU_TESTS[$n]}")
+      seen[$n]=1
     fi
   else
     echo "Invalid test number: $n" >&2

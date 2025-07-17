@@ -2,7 +2,17 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Pintos Debug",
+      "name": "[Week 9-10]User Program Debug",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/pintos/userprog/build/kernel.o",
+      "cwd": "${workspaceFolder}/pintos/userprog",
+      "miDebuggerPath": "/usr/bin/gdb", // 👈 중요: 실제 pintos-gdb 경로로 수정!
+      "miDebuggerServerAddress": "localhost:1234",
+      // "preLaunchTask": "Debug Pintos Test"
+    },
+    {
+      "name": "[Week 8]Thread Debug",
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/pintos/threads/build/kernel.o",
