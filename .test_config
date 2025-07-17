@@ -1,35 +1,110 @@
 # .test_config
-# 포맷: 테스트이름: 실행인자 (’--' 포함): 결과 디렉터리
+# 포맷: 테스트이름: 실행인자 ('--' 포함) : 경로
 
-# alarm tests
-alarm-single:       -- -q: tests/threads
-alarm-multiple:     -- -q: tests/threads
-alarm-simultaneous: -- -q: tests/threads
-alarm-priority:     -- -q: tests/threads
-alarm-zero:         -- -q: tests/threads
-alarm-negative:     -- -q: tests/threads
+[User Program]
+args-none:               -- -q : tests/userprog
+args-single:             -- -q : tests/userprog
+args-multiple:           -- -q : tests/userprog
+args-many:               -- -q : tests/userprog
+args-dbl-space:          -- -q : tests/userprog
+halt:                    -- -q : tests/userprog
+exit:                    -- -q : tests/userprog
+create-normal:           -- -q : tests/userprog
+create-empty:            -- -q : tests/userprog
+create-null:             -- -q : tests/userprog
+create-bad-ptr:          -- -q : tests/userprog
+create-long:             -- -q : tests/userprog
+create-exists:           -- -q : tests/userprog
+create-bound:            -- -q : tests/userprog
+open-normal:             -- -q : tests/userprog
+open-missing:            -- -q : tests/userprog
+open-boundary:           -- -q : tests/userprog
+open-empty:              -- -q : tests/userprog
+open-null:               -- -q : tests/userprog
+open-bad-ptr:            -- -q : tests/userprog
+open-twice:              -- -q : tests/userprog
+close-normal:            -- -q : tests/userprog
+close-twice:             -- -q : tests/userprog
+close-bad-fd:            -- -q : tests/userprog
+read-normal:             -- -q : tests/userprog
+read-bad-ptr:            -- -q : tests/userprog
+read-boundary:           -- -q : tests/userprog
+read-zero:               -- -q : tests/userprog
+read-stdout:             -- -q : tests/userprog
+read-bad-fd:             -- -q : tests/userprog
+write-normal:            -- -q : tests/userprog
+write-bad-ptr:           -- -q : tests/userprog
+write-boundary:          -- -q : tests/userprog
+write-zero:              -- -q : tests/userprog
+write-stdin:             -- -q : tests/userprog
+write-bad-fd:            -- -q : tests/userprog
+fork-once:               -- -q : tests/userprog
+fork-multiple:           -- -q : tests/userprog
+fork-recursive:          -- -q : tests/userprog
+fork-read:               -- -q : tests/userprog
+fork-close:              -- -q : tests/userprog
+fork-boundary:           -- -q : tests/userprog
+exec-once:               -- -q : tests/userprog
+exec-arg:                -- -q : tests/userprog
+exec-boundary:           -- -q : tests/userprog
+exec-missing:            -- -q : tests/userprog
+exec-bad-ptr:            -- -q : tests/userprog
+exec-read:               -- -q : tests/userprog
+wait-simple:             -- -q : tests/userprog
+wait-twice:              -- -q : tests/userprog
+wait-killed:             -- -q : tests/userprog
+wait-bad-pid:            -- -q : tests/userprog
+multi-recurse:           -- -q : tests/userprog
+multi-child-fd:          -- -q : tests/userprog
+rox-simple:              -- -q : tests/userprog
+rox-child:               -- -q : tests/userprog
+rox-multichild:          -- -q : tests/userprog
+bad-read:                -- -q : tests/userprog
+bad-write:               -- -q : tests/userprog
+bad-read2:               -- -q : tests/userprog
+bad-write2:              -- -q : tests/userprog
+bad-jump:                -- -q : tests/userprog
+bad-jump2:               -- -q : tests/userprog
 
-# priority tests
-priority-change:           -- -q: tests/threads
-priority-donate-one:       -- -q: tests/threads
-priority-donate-multiple:  -- -q: tests/threads
-priority-donate-multiple2: -- -q: tests/threads
-priority-donate-nest:      -- -q: tests/threads
-priority-donate-sema:      -- -q: tests/threads
-priority-donate-lower:     -- -q: tests/threads
-priority-fifo:             -- -q: tests/threads
-priority-preempt:          -- -q: tests/threads
-priority-sema:             -- -q: tests/threads
-priority-condvar:          -- -q: tests/threads
-priority-donate-chain:     -- -q: tests/threads
+[Base]
+lg-create:               -- -q : tests/filesys/base
+lg-full:                 -- -q : tests/filesys/base
+lg-random:               -- -q : tests/filesys/base
+lg-seq-block:            -- -q : tests/filesys/base
+lg-seq-random:           -- -q : tests/filesys/base
+sm-create:               -- -q : tests/filesys/base
+sm-full:                 -- -q : tests/filesys/base
+sm-random:               -- -q : tests/filesys/base
+sm-seq-block:            -- -q : tests/filesys/base
+sm-seq-random:           -- -q : tests/filesys/base
+syn-remove:              -- -q : tests/filesys/base
+syn-write:               -- -q : tests/filesys/base
 
-# mlfqs tests (커널 옵션과 run 모드 인자 분리)
-mlfqs-load-1:       -- -mlfqs -q: tests/threads/mlfqs
-mlfqs-load-60:      -- -mlfqs -q: tests/threads/mlfqs
-mlfqs-load-avg:     -- -mlfqs -q: tests/threads/mlfqs
-mlfqs-recent-1:     -- -mlfqs -q: tests/threads/mlfqs
-mlfqs-fair-2:       -- -mlfqs -q: tests/threads/mlfqs
-mlfqs-fair-20:      -- -mlfqs -q: tests/threads/mlfqs
-mlfqs-nice-2:       -- -mlfqs -q: tests/threads/mlfqs
-mlfqs-nice-10:      -- -mlfqs -q: tests/threads/mlfqs
-mlfqs-block:        -- -mlfqs -q: tests/threads/mlfqs
+[No VM]
+multi-oom:               -- -q : tests/userprog/no-vm
+
+[Thread]
+alarm-single:            -- -q : tests/threads
+alarm-multiple:          -- -q : tests/threads
+alarm-simultaneous:      -- -q : tests/threads
+alarm-priority:          -- -q : tests/threads
+alarm-zero:              -- -q : tests/threads
+alarm-negative:          -- -q : tests/threads
+priority-change:         -- -q : tests/threads
+priority-donate-one:     -- -q : tests/threads
+priority-donate-multiple: -- -q : tests/threads
+priority-donate-multiple2:  -- -q : tests/threads
+priority-donate-nest:    -- -q : tests/threads
+priority-donate-sema:    -- -q : tests/threads
+priority-donate-lower:   -- -q : tests/threads
+priority-fifo:           -- -q : tests/threads
+priority-preempt:        -- -q : tests/threads
+priority-sema:           -- -q : tests/threads
+priority-condvar:        -- -q : tests/threads
+priority-donate-chain:   -- -q : tests/threads
+
+[Extra]
+dup2-complex:            -- -q : tests/userprog
+dup2-simple:             -- -q : tests/userprog
+
+# (마지막 공백을 남겨두세요)
