@@ -1,6 +1,7 @@
 # [Pintos] vscode 디버그 연동 v 1.2.0
 
 Week 9 User Program에 맞추어 새롭게 돌아온 편의성 패치 아저씹니다.
+
 새로운 파일을 userprog 폴더에 넣어주면 동작합니다.
 
 * 테스트케이스를 그룹으로 정리해서 볼 수 있습니다.
@@ -157,8 +158,8 @@ ex. 1-5 9 11-13 ⇒ {1, 2, 3, 4, 5, 9, 11, 13} 번 테스트를 진행합니다.
     - 테스트 케이스들 앞에 [그룹명]을 적으면 해당 그룹으로 그룹화 되어 출력됩니다.
 
     <p align="center">
-    <img src="https://user-images.githubusercontent.com/…/first.png" width="300" alt="첫 번째 이미지" />
-    <img src="https://user-images.githubusercontent.com/…/second.png" width="300" alt="두 번째 이미지" />
+    <img src="https://github.com/user-attachments/assets/22b4bf68-9cd1-4b74-8c82-9600188f2171" width="300" alt=".test_config" />
+    <img src="https://github.com/user-attachments/assets/8bcb7747-4ef3-4192-ae21-ad2defd80fcc" width="300" alt="출력 예시" />
     </p>
     
 
