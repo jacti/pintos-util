@@ -35,8 +35,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/../activate"
 
 # --------------------------------------------------
-# .test_config 읽어서 tests 배열과 config_map 생성
-# 형식: 테스트이름: 실행인자 (’--' 포함)
+# .test_config 읽어서 5-필드로 파싱
+# 형식: 테스트명 | Pre-Args | Post-Args | Prog-Args | Test-Path
 # --------------------------------------------------
 CONFIG_FILE="${SCRIPT_DIR}/.test_config"
 if [[ ! -f "$CONFIG_FILE" ]]; then
@@ -44,14 +44,14 @@ if [[ ! -f "$CONFIG_FILE" ]]; then
   exit 1
 fi
 
-declare -A config_args   # 실행 인자
-declare -A config_result # 결과 파일 경로
+declare -A config_pre_args    
+declare -A config_post_args   
+declare -A config_prog_args   
+declare -A config_result      
 declare -A GROUP_TESTS TEST_GROUP MENU_TESTS
 declare -a ORDERED_GROUPS
 tests=()
 
-# --- 섹션과 테스트 라인 함께 파싱 ---
-declare -a ORDERED_GROUPS
 current_group=""
 
 while IFS= read -r raw; do
@@ -66,14 +66,18 @@ while IFS= read -r raw; do
     ORDERED_GROUPS+=("$current_group")
     GROUP_TESTS["$current_group"]=""
   else
-    # test: args : result_dir
-    IFS=':' read -r test args result_dir <<< "$line"
-    test="$(echo "$test"       | xargs)"
-    args="$(echo "$args"       | xargs)"
-    result_dir="$(echo "$result_dir" | xargs)"
+    # 5-필드 파싱: test | pre_args | post_args | prog_args | test_path
+    IFS='|' read -r test pre_args post_args prog_args test_path <<< "$line"
+    test="$(echo "$test"         | xargs)"
+    pre_args="$(echo "$pre_args"   | xargs)"
+    post_args="$(echo "$post_args" | xargs)"
+    prog_args="$(echo "$prog_args" | xargs)"   # 따옴표 포함된 상태 유지
+    test_path="$(echo "$test_path" | xargs)"
 
-    config_args["$test"]="$args"
-    config_result["$test"]="$result_dir"
+    config_pre_args["$test"]="$pre_args"
+    config_post_args["$test"]="$post_args"
+    config_prog_args["$test"]="$prog_args"
+    config_result["$test"]="$test_path"
     tests+=("$test")
 
     # 그룹에 추가
@@ -173,28 +177,24 @@ failed=()
   total=${#sel_tests[@]}
   for test in "${sel_tests[@]}"; do
     echo
-    # config에서 전체 args 가져오기
-    args_full="${config_args[$test]}"      # ex: "-mlfqs -- -q" 또는 "-- -q"
-    
-    # “--” 앞뒤로 나누기
-    kernel_args="$(echo "${args_full%%--*}" | xargs)"   # ex: "-mlfqs" 또는 ""
-    run_args="$(echo "${args_full##*--}" | xargs)"   # ex: "-q"
+    # 5-필드 포맷에서 각 args 가져오기
+    pre_args="${config_pre_args[$test]}"    # -- 이전 인자들
+    post_args="${config_post_args[$test]}"  # -- 이후 run 이전 인자들
+    prog_args="${config_prog_args[$test]}"  # '…' 로 묶인 프로그램 + 인자 전체
     dir="${config_result[$test]}"
     res="${dir}/${test}.result"
-    # ck= "${dir}/${test}.ck"
 
     mkdir -p ${dir}
     
     if [[ "$MODE" == "-q" ]]; then
       # 배치 모드
-      cmd="pintos ${kernel_args:+${kernel_args}} -- ${run_args} run ${test}"
-      make_cmd="make -s ${res} ARGS=\"${kernel_args:+${kernel_args}} -- ${run_args}\""
+      cmd="pintos ${pre_args} -- ${post_args} '${prog_args}'"
       echo "Running ${test} in batch mode... "
       echo "\$ ${cmd}  # in batch mode"
       echo
       # batch 모드: ARGS 전달
       if make -s ${res} \
-            ARGS="${kernel_args:+${kernel_args}} -- ${run_args}"; then
+            ARGS="${pre_args} -- ${post_args} '${prog_args}'"; then
         # make가 성공했으면 .result 안에 PASS 키워드 검사
         if grep -q '^PASS' ${res}; then
           echo "PASS"; passed+=("$test")
@@ -213,7 +213,7 @@ fi
       echo " * 내부 출력은 터미널에 보이면서 '${dir}/${test}.output'에도 저장됩니다."
       echo
 
-      cmd="pintos --gdb ${kernel_args:+${kernel_args}} -- ${run_args} run ${test}"
+      cmd="pintos --gdb ${pre_args} -- ${post_args} '${prog_args}'"
       echo "\$ ${cmd}"
       eval "${cmd}" 2>&1 | tee "${dir}/${test}.output"
 
