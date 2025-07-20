@@ -111,5 +111,10 @@ priority-sema | --fs-disk=10 | -q  -threads-tests -f run | 'priority-sema' | tes
 priority-condvar | --fs-disk=10 | -q  -threads-tests -f run | 'priority-condvar' | tests/threads
 priority-donate-chain | --fs-disk=10 | -q  -threads-tests -f run | 'priority-donate-chain' | tests/threads
 
-# Total testcases: 95
+[extra]
+dup2-simple  | --fs-disk=10 -p tests/userprog/dup2/dup2-simple:dup2-simple   | -q -f run | 'dup2-simple'   | tests/userprog/dup2
+dup2-complex | --fs-disk=10 -p tests/userprog/dup2/dup2-complex:dup2-complex | -q -f run | 'dup2-complex' | tests/userprog/dup2
+
+
+# Total testcases: 97
 # Generated on 2025-07-20

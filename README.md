@@ -1,12 +1,11 @@
-# [Pintos] vscode 디버그 연동 v 1.2.0
+# [Pintos] vscode 디버그 연동 v 2.0.0
 
-Week 9 User Program에 맞추어 새롭게 돌아온 편의성 패치 아저씹니다.
+Week 9 User Program에 필요한 포멧에 맞추어 새롭게 탈바꿈 했습니다.
 
 새로운 파일을 userprog 폴더에 넣어주면 동작합니다.
 
-* 테스트케이스를 그룹으로 정리해서 볼 수 있습니다.
 
-# 세팅
+## 세팅
 
 아래파일 세개를 프로젝트에 넣어줍니다.
 
@@ -148,7 +147,7 @@ ex. 1-5 9 11-13 ⇒ {1, 2, 3, 4, 5, 9, 11, 13} 번 테스트를 진행합니다.
 
 `./userprog/.test_status` 파일을 삭제합니다.
 
-## .test_config
+## .test_config 직접 수정
 
 - 테스트케이스별 전달할 옵션을 변경할 수 있습니다.
     - [테스트케이스] : [qemu옵션] — [핀토스옵션] : [result 파일 경로] 형태로 구성되어 있습니다.
@@ -161,9 +160,20 @@ ex. 1-5 9 11-13 ⇒ {1, 2, 3, 4, 5, 9, 11, 13} 번 테스트를 진행합니다.
     <img src="https://github.com/user-attachments/assets/22b4bf68-9cd1-4b74-8c82-9600188f2171" width="300" alt=".test_config" />
     <img src="https://github.com/user-attachments/assets/8bcb7747-4ef3-4192-ae21-ad2defd80fcc" width="300" alt="출력 예시" />
     </p>
-    
 
-# 업데이트 로그
+## .test_config 생성
+
+- 제공된 `generate_test_config.py` 로 `.test_config` 초안을 생성할 수 있습니다.
+```bash
+    make check > make-check-out.txt # make check 결과를 저장
+    python3 generate_test_config.py < make-check-out.txt > .test_config #make check 결과를 바탕으로 자동 생성
+```
+
+## 업데이트 로그
+- v2.0.0
+    - 설정 파일 구분자 변경
+    - 설정 파일 구분 변수 갯수 추가
+    - 설정 파일 생성 코드 추가
 
 - v1.2.0
     - test case 그룹화 기능 추가
@@ -172,5 +182,8 @@ ex. 1-5 9 11-13 ⇒ {1, 2, 3, 4, 5, 9, 11, 13} 번 테스트를 진행합니다.
 - v1.1.0
     - .test_config 파일 추가
 
+![넝담](https://i.namu.wiki/i/FhMQM_38hoO2uYGBDtn6Ok77Ra2Ul1it1mgdkyoSUHPqX4Y-nr9Dn4LKNToE_g3oRI7AQ_YypphEt_EYFPoKGU36hoPj0M96P72w-ckHs5PUTdKFjEHVC9eNS57lOMG7_2E4bFv4wu4ioQAab4cUig.webp)
+
 > 모두 핀”토”스 파이팅 입니다! 📣
->
+
+> ~~능이 버섯은 안된다...~~
