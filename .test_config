@@ -66,7 +66,7 @@ multi-child-fd | --fs-disk=10 -p tests/userprog/multi-child-fd:multi-child-fd -p
 rox-simple | --fs-disk=10 -p tests/userprog/rox-simple:rox-simple | -q   -f run | 'rox-simple' | tests/userprog
 rox-child | --fs-disk=10 -p tests/userprog/rox-child:rox-child -p tests/userprog/child-rox:child-rox | -q   -f run | 'rox-child' | tests/userprog
 rox-multichild | --fs-disk=10 -p tests/userprog/rox-multichild:rox-multichild -p tests/userprog/child-rox:child-rox | -q   -f run | 'rox-multichild' | tests/userprog
-bad-read | --fs-disk=10 -p tests/userprog/bad-read:bad-read | -q   -f run | 'bad-read' | tests/userprog
+bad-read | -T 30 --fs-disk=10 -p tests/userprog/bad-read:bad-read | -q   -f run | 'bad-read' | tests/userprog
 bad-write | --fs-disk=10 -p tests/userprog/bad-write:bad-write | -q   -f run | 'bad-write' | tests/userprog
 bad-read2 | --fs-disk=10 -p tests/userprog/bad-read2:bad-read2 | -q   -f run | 'bad-read2' | tests/userprog
 bad-write2 | --fs-disk=10 -p tests/userprog/bad-write2:bad-write2 | -q   -f run | 'bad-write2' | tests/userprog
@@ -89,7 +89,7 @@ syn-remove | --fs-disk=10 -p tests/filesys/base/syn-remove:syn-remove | -q   -f 
 syn-write | --fs-disk=10 -p tests/filesys/base/syn-write:syn-write -p tests/filesys/base/child-syn-wrt:child-syn-wrt | -q   -f run | 'syn-write' | tests/filesys/base
 
 [userprog/no-vm]
-multi-oom | --fs-disk=10 -p tests/userprog/no-vm/multi-oom:multi-oom | -q   -f run | 'multi-oom' | tests/userprog/no-vm
+multi-oom | -T 600 -k -v -m 20 -m 20 --fs-disk=10 -p tests/userprog/no-vm/multi-oom:multi-oom | -q   -f run | 'multi-oom' | tests/userprog/no-vm
 
 [threads]
 alarm-single | --fs-disk=10 | -q  -threads-tests -f run | 'alarm-single' | tests/threads
@@ -112,9 +112,9 @@ priority-condvar | --fs-disk=10 | -q  -threads-tests -f run | 'priority-condvar'
 priority-donate-chain | --fs-disk=10 | -q  -threads-tests -f run | 'priority-donate-chain' | tests/threads
 
 [extra]
-dup2-simple  | --fs-disk=10 -p tests/userprog/dup2/dup2-simple:dup2-simple   | -q -f run | 'dup2-simple'   | tests/userprog/dup2
-dup2-complex | --fs-disk=10 -p tests/userprog/dup2/dup2-complex:dup2-complex | -q -f run | 'dup2-complex' | tests/userprog/dup2
+dup2-simple  | --fs-disk=10 -p tests/userprog/dup2/dup2-simple:dup2-simple -p ../../tests/userprog/dup2/sample.txt:sample.txt   | -q -f run | 'dup2-simple'   | tests/userprog/dup2
+dup2-complex | --fs-disk=10 -p tests/userprog/dup2/dup2-complex:dup2-complex -p ../../tests/userprog/dup2/sample.txt:sample.txt | -q   -f run | 'dup2-complex' | tests/userprog/dup2
 
 
 # Total testcases: 97
-# Generated on 2025-07-20
+# Generated on 2025-07-29
