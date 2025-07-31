@@ -1,0 +1,35 @@
+# .test_config
+# 포맷: 테스트이름: 실행인자 (’--' 포함): 결과 디렉터리
+
+# alarm tests
+alarm-single:       -- -q: tests/threads
+alarm-multiple:     -- -q: tests/threads
+alarm-simultaneous: -- -q: tests/threads
+alarm-priority:     -- -q: tests/threads
+alarm-zero:         -- -q: tests/threads
+alarm-negative:     -- -q: tests/threads
+
+# priority tests
+priority-change:           -- -q: tests/threads
+priority-donate-one:       -- -q: tests/threads
+priority-donate-multiple:  -- -q: tests/threads
+priority-donate-multiple2: -- -q: tests/threads
+priority-donate-nest:      -- -q: tests/threads
+priority-donate-sema:      -- -q: tests/threads
+priority-donate-lower:     -- -q: tests/threads
+priority-fifo:             -- -q: tests/threads
+priority-preempt:          -- -q: tests/threads
+priority-sema:             -- -q: tests/threads
+priority-condvar:          -- -q: tests/threads
+priority-donate-chain:     -- -q: tests/threads
+
+# mlfqs tests (커널 옵션과 run 모드 인자 분리)
+mlfqs-load-1:       -- -mlfqs -q: tests/threads/mlfqs
+mlfqs-load-60:      -- -mlfqs -q: tests/threads/mlfqs
+mlfqs-load-avg:     -- -mlfqs -q: tests/threads/mlfqs
+mlfqs-recent-1:     -- -mlfqs -q: tests/threads/mlfqs
+mlfqs-fair-2:       -- -mlfqs -q: tests/threads/mlfqs
+mlfqs-fair-20:      -- -mlfqs -q: tests/threads/mlfqs
+mlfqs-nice-2:       -- -mlfqs -q: tests/threads/mlfqs
+mlfqs-nice-10:      -- -mlfqs -q: tests/threads/mlfqs
+mlfqs-block:        -- -mlfqs -q: tests/threads/mlfqs

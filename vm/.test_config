@@ -1,0 +1,133 @@
+# .test_config format:
+# test_name | pre_args | post_args | prog_args | test_path
+#
+# Fields:
+#   test_name : 테스트 식별용 이름
+#   pre_args  : 'pintos' 호출 시 -- 이전 옵션들
+#   post_args : 'pintos' 호출 시 -- 이후, run 이전 옵션들
+#   prog_args : 작은따옴표로 묶인 테스트 실행 인자 전체
+#   test_path : 테스트 바이너리 경로 (호스트 파일 시스템 내)
+
+[userprog]
+create-bad-ptr | --fs-disk=10 -p tests/userprog/create-bad-ptr:create-bad-ptr --swap-disk=4 | -q   -f run | 'create-bad-ptr' | tests/userprog
+create-long | --fs-disk=10 -p tests/userprog/create-long:create-long --swap-disk=4 | -q   -f run | 'create-long' | tests/userprog
+create-exists | --fs-disk=10 -p tests/userprog/create-exists:create-exists --swap-disk=4 | -q   -f run | 'create-exists' | tests/userprog
+create-bound | --fs-disk=10 -p tests/userprog/create-bound:create-bound --swap-disk=4 | -q   -f run | 'create-bound' | tests/userprog
+open-normal | --fs-disk=10 -p tests/userprog/open-normal:open-normal -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'open-normal' | tests/userprog
+open-missing | --fs-disk=10 -p tests/userprog/open-missing:open-missing --swap-disk=4 | -q   -f run | 'open-missing' | tests/userprog
+open-boundary | --fs-disk=10 -p tests/userprog/open-boundary:open-boundary -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'open-boundary' | tests/userprog
+open-empty | --fs-disk=10 -p tests/userprog/open-empty:open-empty --swap-disk=4 | -q   -f run | 'open-empty' | tests/userprog
+open-null | --fs-disk=10 -p tests/userprog/open-null:open-null --swap-disk=4 | -q   -f run | 'open-null' | tests/userprog
+open-bad-ptr | --fs-disk=10 -p tests/userprog/open-bad-ptr:open-bad-ptr --swap-disk=4 | -q   -f run | 'open-bad-ptr' | tests/userprog
+open-twice | --fs-disk=10 -p tests/userprog/open-twice:open-twice -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'open-twice' | tests/userprog
+close-normal | --fs-disk=10 -p tests/userprog/close-normal:close-normal -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'close-normal' | tests/userprog
+close-twice | --fs-disk=10 -p tests/userprog/close-twice:close-twice -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'close-twice' | tests/userprog
+close-bad-fd | --fs-disk=10 -p tests/userprog/close-bad-fd:close-bad-fd --swap-disk=4 | -q   -f run | 'close-bad-fd' | tests/userprog
+read-normal | --fs-disk=10 -p tests/userprog/read-normal:read-normal -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'read-normal' | tests/userprog
+read-bad-ptr | --fs-disk=10 -p tests/userprog/read-bad-ptr:read-bad-ptr -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'read-bad-ptr' | tests/userprog
+read-boundary | --fs-disk=10 -p tests/userprog/read-boundary:read-boundary -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'read-boundary' | tests/userprog
+read-zero | --fs-disk=10 -p tests/userprog/read-zero:read-zero -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'read-zero' | tests/userprog
+read-stdout | --fs-disk=10 -p tests/userprog/read-stdout:read-stdout --swap-disk=4 | -q   -f run | 'read-stdout' | tests/userprog
+read-bad-fd | --fs-disk=10 -p tests/userprog/read-bad-fd:read-bad-fd --swap-disk=4 | -q   -f run | 'read-bad-fd' | tests/userprog
+write-normal | --fs-disk=10 -p tests/userprog/write-normal:write-normal -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'write-normal' | tests/userprog
+write-bad-ptr | --fs-disk=10 -p tests/userprog/write-bad-ptr:write-bad-ptr -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'write-bad-ptr' | tests/userprog
+write-boundary | --fs-disk=10 -p tests/userprog/write-boundary:write-boundary -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'write-boundary' | tests/userprog
+write-zero | --fs-disk=10 -p tests/userprog/write-zero:write-zero -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'write-zero' | tests/userprog
+write-stdin | --fs-disk=10 -p tests/userprog/write-stdin:write-stdin --swap-disk=4 | -q   -f run | 'write-stdin' | tests/userprog
+write-bad-fd | --fs-disk=10 -p tests/userprog/write-bad-fd:write-bad-fd --swap-disk=4 | -q   -f run | 'write-bad-fd' | tests/userprog
+fork-once | --fs-disk=10 -p tests/userprog/fork-once:fork-once --swap-disk=4 | -q   -f run | 'fork-once' | tests/userprog
+fork-multiple | --fs-disk=10 -p tests/userprog/fork-multiple:fork-multiple --swap-disk=4 | -q   -f run | 'fork-multiple' | tests/userprog
+fork-recursive | --fs-disk=10 -p tests/userprog/fork-recursive:fork-recursive --swap-disk=4 | -q   -f run | 'fork-recursive' | tests/userprog
+fork-read | --fs-disk=10 -p tests/userprog/fork-read:fork-read -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'fork-read' | tests/userprog
+fork-close | --fs-disk=10 -p tests/userprog/fork-close:fork-close -p ../../tests/userprog/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'fork-close' | tests/userprog
+fork-boundary | --fs-disk=10 -p tests/userprog/fork-boundary:fork-boundary --swap-disk=4 | -q   -f run | 'fork-boundary' | tests/userprog
+exec-once | --fs-disk=10 -p tests/userprog/exec-once:exec-once -p tests/userprog/child-simple:child-simple --swap-disk=4 | -q   -f run | 'exec-once' | tests/userprog
+exec-arg | --fs-disk=10 -p tests/userprog/exec-arg:exec-arg -p tests/userprog/child-args:child-args --swap-disk=4 | -q   -f run | 'exec-arg' | tests/userprog
+exec-boundary | --fs-disk=10 -p tests/userprog/exec-boundary:exec-boundary -p tests/userprog/child-simple:child-simple --swap-disk=4 | -q   -f run | 'exec-boundary' | tests/userprog
+exec-missing | --fs-disk=10 -p tests/userprog/exec-missing:exec-missing --swap-disk=4 | -q   -f run | 'exec-missing' | tests/userprog
+exec-bad-ptr | --fs-disk=10 -p tests/userprog/exec-bad-ptr:exec-bad-ptr --swap-disk=4 | -q   -f run | 'exec-bad-ptr' | tests/userprog
+exec-read | --fs-disk=10 -p tests/userprog/exec-read:exec-read -p ../../tests/userprog/sample.txt:sample.txt -p tests/userprog/child-read:child-read --swap-disk=4 | -q   -f run | 'exec-read' | tests/userprog
+wait-simple | --fs-disk=10 -p tests/userprog/wait-simple:wait-simple -p tests/userprog/child-simple:child-simple --swap-disk=4 | -q   -f run | 'wait-simple' | tests/userprog
+wait-twice | --fs-disk=10 -p tests/userprog/wait-twice:wait-twice -p tests/userprog/child-simple:child-simple --swap-disk=4 | -q   -f run | 'wait-twice' | tests/userprog
+wait-killed | --fs-disk=10 -p tests/userprog/wait-killed:wait-killed -p tests/userprog/child-bad:child-bad --swap-disk=4 | -q   -f run | 'wait-killed' | tests/userprog
+wait-bad-pid | --fs-disk=10 -p tests/userprog/wait-bad-pid:wait-bad-pid --swap-disk=4 | -q   -f run | 'wait-bad-pid' | tests/userprog
+multi-recurse | --fs-disk=10 -p tests/userprog/multi-recurse:multi-recurse --swap-disk=4 | -q   -f run | 'multi-recurse 15' | tests/userprog
+multi-child-fd | --fs-disk=10 -p tests/userprog/multi-child-fd:multi-child-fd -p ../../tests/userprog/sample.txt:sample.txt -p tests/userprog/child-close:child-close --swap-disk=4 | -q   -f run | 'multi-child-fd' | tests/userprog
+rox-simple | --fs-disk=10 -p tests/userprog/rox-simple:rox-simple --swap-disk=4 | -q   -f run | 'rox-simple' | tests/userprog
+rox-child | --fs-disk=10 -p tests/userprog/rox-child:rox-child -p tests/userprog/child-rox:child-rox --swap-disk=4 | -q   -f run | 'rox-child' | tests/userprog
+rox-multichild | --fs-disk=10 -p tests/userprog/rox-multichild:rox-multichild -p tests/userprog/child-rox:child-rox --swap-disk=4 | -q   -f run | 'rox-multichild' | tests/userprog
+bad-read | --fs-disk=10 -p tests/userprog/bad-read:bad-read --swap-disk=4 | -q   -f run | 'bad-read' | tests/userprog
+bad-write | --fs-disk=10 -p tests/userprog/bad-write:bad-write --swap-disk=4 | -q   -f run | 'bad-write' | tests/userprog
+bad-read2 | --fs-disk=10 -p tests/userprog/bad-read2:bad-read2 --swap-disk=4 | -q   -f run | 'bad-read2' | tests/userprog
+bad-write2 | --fs-disk=10 -p tests/userprog/bad-write2:bad-write2 --swap-disk=4 | -q   -f run | 'bad-write2' | tests/userprog
+bad-jump | --fs-disk=10 -p tests/userprog/bad-jump:bad-jump --swap-disk=4 | -q   -f run | 'bad-jump' | tests/userprog
+bad-jump2 | --fs-disk=10 -p tests/userprog/bad-jump2:bad-jump2 --swap-disk=4 | -q   -f run | 'bad-jump2' | tests/userprog
+
+[vm]
+pt-grow-stack | --fs-disk=10 -p tests/vm/pt-grow-stack:pt-grow-stack --swap-disk=4 | -q   -f run | 'pt-grow-stack' | tests/vm
+pt-grow-bad | --fs-disk=10 -p tests/vm/pt-grow-bad:pt-grow-bad --swap-disk=4 | -q   -f run | 'pt-grow-bad' | tests/vm
+pt-big-stk-obj | --fs-disk=10 -p tests/vm/pt-big-stk-obj:pt-big-stk-obj --swap-disk=4 | -q   -f run | 'pt-big-stk-obj' | tests/vm
+pt-bad-addr | --fs-disk=10 -p tests/vm/pt-bad-addr:pt-bad-addr --swap-disk=4 | -q   -f run | 'pt-bad-addr' | tests/vm
+pt-bad-read | --fs-disk=10 -p tests/vm/pt-bad-read:pt-bad-read -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'pt-bad-read' | tests/vm
+pt-write-code | --fs-disk=10 -p tests/vm/pt-write-code:pt-write-code --swap-disk=4 | -q   -f run | 'pt-write-code' | tests/vm
+pt-write-code2 | --fs-disk=10 -p tests/vm/pt-write-code2:pt-write-code2 -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'pt-write-code2' | tests/vm
+pt-grow-stk-sc | --fs-disk=10 -p tests/vm/pt-grow-stk-sc:pt-grow-stk-sc --swap-disk=4 | -q   -f run | 'pt-grow-stk-sc' | tests/vm
+page-linear | --fs-disk=10 -p tests/vm/page-linear:page-linear --swap-disk=4 | -q   -f run | 'page-linear' | tests/vm
+page-parallel | --fs-disk=10 -p tests/vm/page-parallel:page-parallel -p tests/vm/child-linear:child-linear --swap-disk=4 | -q   -f run | 'page-parallel' | tests/vm
+page-merge-seq | --fs-disk=10 -p tests/vm/page-merge-seq:page-merge-seq -p tests/vm/child-sort:child-sort --swap-disk=4 | -q   -f run | 'page-merge-seq' | tests/vm
+page-merge-par | --fs-disk=10 -p tests/vm/page-merge-par:page-merge-par -p tests/vm/child-sort:child-sort --swap-disk=10 | -q   -f run | 'page-merge-par' | tests/vm
+page-merge-stk | --fs-disk=10 -p tests/vm/page-merge-stk:page-merge-stk -p tests/vm/child-qsort:child-qsort --swap-disk=10 | -q   -f run | 'page-merge-stk' | tests/vm
+page-merge-mm | --fs-disk=10 -p tests/vm/page-merge-mm:page-merge-mm -p tests/vm/child-qsort-mm:child-qsort-mm --swap-disk=10 | -q   -f run | 'page-merge-mm' | tests/vm
+page-shuffle | --fs-disk=10 -p tests/vm/page-shuffle:page-shuffle --swap-disk=4 | -q   -f run | 'page-shuffle' | tests/vm
+mmap-read | --fs-disk=10 -p tests/vm/mmap-read:mmap-read -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-read' | tests/vm
+mmap-close | --fs-disk=10 -p tests/vm/mmap-close:mmap-close -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-close' | tests/vm
+mmap-unmap | --fs-disk=10 -p tests/vm/mmap-unmap:mmap-unmap -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-unmap' | tests/vm
+mmap-overlap | --fs-disk=10 -p tests/vm/mmap-overlap:mmap-overlap -p tests/vm/zeros:zeros --swap-disk=4 | -q   -f run | 'mmap-overlap' | tests/vm
+mmap-twice | --fs-disk=10 -p tests/vm/mmap-twice:mmap-twice -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-twice' | tests/vm
+mmap-write | --fs-disk=10 -p tests/vm/mmap-write:mmap-write --swap-disk=4 | -q   -f run | 'mmap-write' | tests/vm
+mmap-ro | --fs-disk=10 -p tests/vm/mmap-ro:mmap-ro -p ../../tests/vm/large.txt:large.txt --swap-disk=4 | -q   -f run | 'mmap-ro' | tests/vm
+mmap-exit | --fs-disk=10 -p tests/vm/mmap-exit:mmap-exit -p tests/vm/child-mm-wrt:child-mm-wrt --swap-disk=4 | -q   -f run | 'mmap-exit' | tests/vm
+mmap-shuffle | --fs-disk=10 -p tests/vm/mmap-shuffle:mmap-shuffle --swap-disk=4 | -q   -f run | 'mmap-shuffle' | tests/vm
+mmap-bad-fd | --fs-disk=10 -p tests/vm/mmap-bad-fd:mmap-bad-fd --swap-disk=4 | -q   -f run | 'mmap-bad-fd' | tests/vm
+mmap-clean | --fs-disk=10 -p tests/vm/mmap-clean:mmap-clean -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-clean' | tests/vm
+mmap-inherit | --fs-disk=10 -p tests/vm/mmap-inherit:mmap-inherit -p ../../tests/vm/sample.txt:sample.txt -p tests/vm/child-inherit:child-inherit --swap-disk=4 | -q   -f run | 'mmap-inherit' | tests/vm
+mmap-misalign | --fs-disk=10 -p tests/vm/mmap-misalign:mmap-misalign -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-misalign' | tests/vm
+mmap-null | --fs-disk=10 -p tests/vm/mmap-null:mmap-null -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-null' | tests/vm
+mmap-over-code | --fs-disk=10 -p tests/vm/mmap-over-code:mmap-over-code -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-over-code' | tests/vm
+mmap-over-data | --fs-disk=10 -p tests/vm/mmap-over-data:mmap-over-data -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-over-data' | tests/vm
+mmap-over-stk | --fs-disk=10 -p tests/vm/mmap-over-stk:mmap-over-stk -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-over-stk' | tests/vm
+mmap-remove | --fs-disk=10 -p tests/vm/mmap-remove:mmap-remove -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-remove' | tests/vm
+mmap-zero | --fs-disk=10 -p tests/vm/mmap-zero:mmap-zero --swap-disk=4 | -q   -f run | 'mmap-zero' | tests/vm
+mmap-bad-fd2 | --fs-disk=10 -p tests/vm/mmap-bad-fd2:mmap-bad-fd2 --swap-disk=4 | -q   -f run | 'mmap-bad-fd2' | tests/vm
+mmap-bad-fd3 | --fs-disk=10 -p tests/vm/mmap-bad-fd3:mmap-bad-fd3 --swap-disk=4 | -q   -f run | 'mmap-bad-fd3' | tests/vm
+mmap-zero-len | --fs-disk=10 -p tests/vm/mmap-zero-len:mmap-zero-len --swap-disk=4 | -q   -f run | 'mmap-zero-len' | tests/vm
+mmap-off | --fs-disk=10 -p tests/vm/mmap-off:mmap-off -p ../../tests/vm/large.txt:large.txt --swap-disk=4 | -q   -f run | 'mmap-off' | tests/vm
+mmap-bad-off | --fs-disk=10 -p tests/vm/mmap-bad-off:mmap-bad-off -p ../../tests/vm/large.txt:large.txt --swap-disk=4 | -q   -f run | 'mmap-bad-off' | tests/vm
+mmap-kernel | --fs-disk=10 -p tests/vm/mmap-kernel:mmap-kernel -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-kernel' | tests/vm
+lazy-file | --fs-disk=10 -p tests/vm/lazy-file:lazy-file -p ../../tests/vm/sample.txt:sample.txt -p ../../tests/vm/small.txt:small.txt --swap-disk=4 | -q   -f run | 'lazy-file' | tests/vm
+lazy-anon | --fs-disk=10 -p tests/vm/lazy-anon:lazy-anon --swap-disk=4 | -q   -f run | 'lazy-anon' | tests/vm
+swap-file | --fs-disk=10 -p tests/vm/swap-file:swap-file -p ../../tests/vm/large.txt:large.txt --swap-disk=10 | -q   -f run | 'swap-file' | tests/vm
+swap-anon | --fs-disk=10 -p tests/vm/swap-anon:swap-anon --swap-disk=30 | -q   -f run | 'swap-anon' | tests/vm
+swap-iter | --fs-disk=10 -p tests/vm/swap-iter:swap-iter -p ../../tests/vm/large.txt:large.txt --swap-disk=50 | -q   -f run | 'swap-iter' | tests/vm
+swap-fork | --fs-disk=10 -p tests/vm/swap-fork:swap-fork -p tests/vm/child-swap:child-swap --swap-disk=200 | -q   -f run | 'swap-fork' | tests/vm
+
+[filesys/base]
+lg-create | --fs-disk=10 -p tests/filesys/base/lg-create:lg-create --swap-disk=4 | -q   -f run | 'lg-create' | tests/filesys/base
+lg-full | --fs-disk=10 -p tests/filesys/base/lg-full:lg-full --swap-disk=4 | -q   -f run | 'lg-full' | tests/filesys/base
+lg-random | --fs-disk=10 -p tests/filesys/base/lg-random:lg-random --swap-disk=4 | -q   -f run | 'lg-random' | tests/filesys/base
+lg-seq-block | --fs-disk=10 -p tests/filesys/base/lg-seq-block:lg-seq-block --swap-disk=4 | -q   -f run | 'lg-seq-block' | tests/filesys/base
+lg-seq-random | --fs-disk=10 -p tests/filesys/base/lg-seq-random:lg-seq-random --swap-disk=4 | -q   -f run | 'lg-seq-random' | tests/filesys/base
+sm-create | --fs-disk=10 -p tests/filesys/base/sm-create:sm-create --swap-disk=4 | -q   -f run | 'sm-create' | tests/filesys/base
+sm-full | --fs-disk=10 -p tests/filesys/base/sm-full:sm-full --swap-disk=4 | -q   -f run | 'sm-full' | tests/filesys/base
+sm-random | --fs-disk=10 -p tests/filesys/base/sm-random:sm-random --swap-disk=4 | -q   -f run | 'sm-random' | tests/filesys/base
+sm-seq-block | --fs-disk=10 -p tests/filesys/base/sm-seq-block:sm-seq-block --swap-disk=4 | -q   -f run | 'sm-seq-block' | tests/filesys/base
+sm-seq-random | --fs-disk=10 -p tests/filesys/base/sm-seq-random:sm-seq-random --swap-disk=4 | -q   -f run | 'sm-seq-random' | tests/filesys/base
+syn-read | --fs-disk=10 -p tests/filesys/base/syn-read:syn-read -p tests/filesys/base/child-syn-read:child-syn-read --swap-disk=4 | -q   -f run | 'syn-read' | tests/filesys/base
+syn-remove | --fs-disk=10 -p tests/filesys/base/syn-remove:syn-remove --swap-disk=4 | -q   -f run | 'syn-remove' | tests/filesys/base
+syn-write | --fs-disk=10 -p tests/filesys/base/syn-write:syn-write -p tests/filesys/base/child-syn-wrt:child-syn-wrt --swap-disk=4 | -q   -f run | 'syn-write' | tests/filesys/base
+
+[vm/cow]
+cow-simple | --fs-disk=10 -p tests/vm/cow/cow-simple:cow-simple --swap-disk=4 | -q   -f run | 'cow-simple' | tests/vm/cow
+
+# Total testcases: 113
+# Generated on 2025-08-01
