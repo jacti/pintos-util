@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+# 📍 pest PATH: /usr/local/bin/pest 또는 ~/.local/bin/pest 에 설치 권장
+# ➤ ln -s ~/pintos/pest /usr/local/bin/pest
+
+PROJECTS=("threads" "userprog" "vm" "filesys")
+
+# 🎨 색상 정의
+RED="\e[31m"
+GREEN="\e[32m"
+YELLOW="\e[33m"
+BLUE="\e[34m"
+MAGENTA="\e[35m"
+CYAN="\e[36m"
+RESET="\e[0m"
+
+# 🟡 로고 배너
+echo -e "${CYAN}"
+cat <<'EOF'
+╔══════════════════════════════════════════╗
+║        🧪 PEST - Pintos Easy Select Tool ║
+╚══════════════════════════════════════════╝
+EOF
+echo -e "${RESET}"
+
+# 📂 프로젝트 선택
+echo -e "${GREEN}💡 Pintos 프로젝트를 선택하세요:${RESET}"
+PROJ=$(printf "%s\n" "${PROJECTS[@]}" | fzf --prompt "📂 프로젝트 > " --height=40% --border)
+[[ -z "$PROJ" ]] && echo -e "${RED}🚫 선택이 취소되었습니다.${RESET}" && exit 1
+
+# ⚙️ 옵션 선택
+CHOICE=$(printf "🧪 Run Tests (-q)\n🐞 Debug Mode (-g)\n🧼 Clean Build (-q -r)\n🔍 Debug with Rebuild (-g -r)\n❌ Exit" \
+  | fzf --prompt "⚙️  테스트 옵션 > " --height=40% --border)
+
+case "$CHOICE" in
+  *"-q -r"*) OPTS="-q -r" ;;
+  *"-g -r"*) OPTS="-g -r" ;;
+  *"-g"*)    OPTS="-g" ;;
+  *"-q"*)    OPTS="-q" ;;
+  *)         echo -e "${YELLOW}👋 종료합니다.${RESET}" && exit 0 ;;
+esac
+
+# 📝 실행할 스크립트 정의
+SCRIPT="./$PROJ/select_test.sh"
+if [[ ! -f "$SCRIPT" ]]; then
+  echo -e "${RED}❌ 스크립트를 찾을 수 없습니다: $SCRIPT${RESET}"
+  exit 1
+fi
+
+# 🔍 디버깅 안내 메시지
+if [[ "$OPTS" == *"-g"* ]]; then
+  echo ""
+  echo -e "${MAGENTA}🧭 VSCode에서 다음 디버깅 구성을 선택하세요:${RESET}"
+  case "$PROJ" in
+    threads)  DBG="[Week 9]Thread Debug" ;;
+    userprog) DBG="[Week 10-11]User Program Debug" ;;
+    vm)       DBG="[Week 12-13]VM Debug" ;;
+    filesys)  DBG="[Extra Week]Filesystem Debug" ;;
+  esac
+  echo -e "➡️  ${CYAN}$DBG${RESET}"
+  echo -e "${YELLOW}💬 QEMU 창이 뜨고 localhost:1234 로 GDB가 연결됩니다.${RESET}"
+  echo -e "${BLUE}⏳ 디버깅 준비 후 Enter를 눌러주세요...${RESET}"
+  read -r _
+fi
+
+# 🚀 실행
+echo ""
+echo -e "${CYAN}▶ 실행할 스크립트 : ${YELLOW}$SCRIPT $OPTS${RESET}"
+echo -e "${CYAN}═══════════════════════════════════════════════${RESET}"
+bash "$SCRIPT" $OPTS
+
+# ✅ 종료 배너
+echo ""
+echo -e "${GREEN}🎉 작업을 완료했습니다.🥳${RESET}"
+echo -e "${BLUE}PEST를 다시 실행하려면 'pest'를 입력하세요.${RESET}"
