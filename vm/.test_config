@@ -9,6 +9,16 @@
 #   test_path : 테스트 바이너리 경로 (호스트 파일 시스템 내)
 
 [userprog]
+args-none | --fs-disk=10 -p tests/userprog/args-none:args-none --swap-disk=4 | -q   -f run | 'args-none' | tests/userprog
+args-single | --fs-disk=10 -p tests/userprog/args-single:args-single --swap-disk=4 | -q   -f run | 'args-single onearg' | tests/userprog
+args-multiple | --fs-disk=10 -p tests/userprog/args-multiple:args-multiple --swap-disk=4 | -q   -f run | 'args-multiple some arguments for you!' | tests/userprog
+args-many | --fs-disk=10 -p tests/userprog/args-many:args-many --swap-disk=4 | -q   -f run | 'args-many a b c d e f g h i j k l m n o p q r s t u v' | tests/userprog
+args-dbl-space | --fs-disk=10 -p tests/userprog/args-dbl-space:args-dbl-space --swap-disk=4 | -q   -f run | 'args-dbl-space two  spaces!' | tests/userprog
+halt | --fs-disk=10 -p tests/userprog/halt:halt --swap-disk=4 | -q   -f run | 'halt' | tests/userprog
+exit | --fs-disk=10 -p tests/userprog/exit:exit --swap-disk=4 | -q   -f run | 'exit' | tests/userprog
+create-normal | --fs-disk=10 -p tests/userprog/create-normal:create-normal --swap-disk=4 | -q   -f run | 'create-normal' | tests/userprog
+create-empty | --fs-disk=10 -p tests/userprog/create-empty:create-empty --swap-disk=4 | -q   -f run | 'create-empty' | tests/userprog
+create-null | --fs-disk=10 -p tests/userprog/create-null:create-null --swap-disk=4 | -q   -f run | 'create-null' | tests/userprog
 create-bad-ptr | --fs-disk=10 -p tests/userprog/create-bad-ptr:create-bad-ptr --swap-disk=4 | -q   -f run | 'create-bad-ptr' | tests/userprog
 create-long | --fs-disk=10 -p tests/userprog/create-long:create-long --swap-disk=4 | -q   -f run | 'create-long' | tests/userprog
 create-exists | --fs-disk=10 -p tests/userprog/create-exists:create-exists --swap-disk=4 | -q   -f run | 'create-exists' | tests/userprog
@@ -129,5 +139,5 @@ syn-write | --fs-disk=10 -p tests/filesys/base/syn-write:syn-write -p tests/file
 [vm/cow]
 cow-simple | --fs-disk=10 -p tests/vm/cow/cow-simple:cow-simple --swap-disk=4 | -q   -f run | 'cow-simple' | tests/vm/cow
 
-# Total testcases: 113
-# Generated on 2025-08-01
+# Total testcases: 123
+# Generated on 2025-08-04
