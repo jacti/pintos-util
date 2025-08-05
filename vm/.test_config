@@ -156,5 +156,8 @@ priority-sema | --fs-disk=10 -p tests/threads/priority-sema:priority-sema -p tes
 priority-condvar | --fs-disk=10 -p tests/threads/priority-condvar:priority-condvar -p tests/threads/priority-condvar:priority-condvar --swap-disk=4 | -q   -f run | 'priority-condvar' | tests/threads
 priority-donate-chain | --fs-disk=10 -p tests/threads/priority-donate-chain:priority-donate-chain -p tests/threads/priority-donate-chain:priority-donate-chain --swap-disk=4 | -q   -f run | 'priority-donate-chain' | tests/threads
 
-# Total testcases: 140
+[vm/cow]
+cow-simple | --fs-disk=10 -p tests/vm/cow/cow-simple:cow-simple --swap-disk=4 | -q   -f run | 'cow-simple' | tests/vm/cow
+
+# Total testcases: 141
 # Generated on 2025-08-05
