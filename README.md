@@ -1,4 +1,4 @@
-# [Pintos] vscode 디버그 연동 v 2.0.2
+# [Pintos] vscode 디버그 연동 v 2.1.0
 
 Week 12 ~ Week 13 virtual memory project에 필요한 포멧에 맞추어 새롭게 탈바꿈 했습니다.
 
