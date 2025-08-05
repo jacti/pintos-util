@@ -24,7 +24,7 @@ Week 12 ~ Week 13 virtual memory project에 필요한 포멧에 맞추어 새롭
 
 ### Project 1: Threads
 
-- [select_test.sh](/select_test.sh)
+- [select_test.sh](threads/select_test.sh)
 
   - `pintos/threads` 폴더에 넣어줍니다.
   - 권한 부여
@@ -33,13 +33,13 @@ Week 12 ~ Week 13 virtual memory project에 필요한 포멧에 맞추어 새롭
     chmod +x ./select_test.sh
     ```
 
-- [.test_config](/.test_config)
+- [.test_config](threads/.test_config)
 
   - `pintos/threads` 폴더에 넣어줍니다.
 
 ### Project 2: User Program
 
-- [select_test.sh](/select_test.sh)
+- [select_test.sh](userprog/select_test.sh)
 
   - `pintos/userprog` 폴더에 넣어줍니다.
   - 권한 부여
@@ -48,13 +48,13 @@ Week 12 ~ Week 13 virtual memory project에 필요한 포멧에 맞추어 새롭
     chmod +x ./select_test.sh
     ```
 
-- [.test_config](/.test_config)
+- [.test_config](userprog/.test_config)
 
   - `pintos/userprog` 폴더에 넣어줍니다.
 
 ### Project 3: Virtual Memory
 
-- [select_test.sh](/select_test.sh)
+- [select_test.sh](vm/select_test.sh)
 
   - `pintos/vm` 폴더에 넣어줍니다.
   - 권한 부여
@@ -63,7 +63,7 @@ Week 12 ~ Week 13 virtual memory project에 필요한 포멧에 맞추어 새롭
     chmod +x ./select_test.sh
     ```
 
-- [.test_config](/.test_config)
+- [.test_config](vm/.test_config)
 
   - `pintos/vm` 폴더에 넣어줍니다.
 
