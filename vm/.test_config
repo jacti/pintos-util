@@ -74,52 +74,52 @@ bad-jump | --fs-disk=10 -p tests/userprog/bad-jump:bad-jump --swap-disk=4 | -q  
 bad-jump2 | --fs-disk=10 -p tests/userprog/bad-jump2:bad-jump2 --swap-disk=4 | -q   -f run | 'bad-jump2' | tests/userprog
 
 [vm]
-pt-grow-stack | --fs-disk=10 -p tests/vm/pt-grow-stack:pt-grow-stack --swap-disk=4 | -q   -f run | 'pt-grow-stack' | tests/vm
-pt-grow-bad | --fs-disk=10 -p tests/vm/pt-grow-bad:pt-grow-bad --swap-disk=4 | -q   -f run | 'pt-grow-bad' | tests/vm
-pt-big-stk-obj | --fs-disk=10 -p tests/vm/pt-big-stk-obj:pt-big-stk-obj --swap-disk=4 | -q   -f run | 'pt-big-stk-obj' | tests/vm
-pt-bad-addr | --fs-disk=10 -p tests/vm/pt-bad-addr:pt-bad-addr --swap-disk=4 | -q   -f run | 'pt-bad-addr' | tests/vm
-pt-bad-read | --fs-disk=10 -p tests/vm/pt-bad-read:pt-bad-read -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'pt-bad-read' | tests/vm
-pt-write-code | --fs-disk=10 -p tests/vm/pt-write-code:pt-write-code --swap-disk=4 | -q   -f run | 'pt-write-code' | tests/vm
-pt-write-code2 | --fs-disk=10 -p tests/vm/pt-write-code2:pt-write-code2 -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'pt-write-code2' | tests/vm
-pt-grow-stk-sc | --fs-disk=10 -p tests/vm/pt-grow-stk-sc:pt-grow-stk-sc --swap-disk=4 | -q   -f run | 'pt-grow-stk-sc' | tests/vm
-page-linear | --fs-disk=10 -p tests/vm/page-linear:page-linear --swap-disk=4 | -q   -f run | 'page-linear' | tests/vm
-page-parallel | --fs-disk=10 -p tests/vm/page-parallel:page-parallel -p tests/vm/child-linear:child-linear --swap-disk=4 | -q   -f run | 'page-parallel' | tests/vm
-page-merge-seq | --fs-disk=10 -p tests/vm/page-merge-seq:page-merge-seq -p tests/vm/child-sort:child-sort --swap-disk=4 | -q   -f run | 'page-merge-seq' | tests/vm
-page-merge-par | --fs-disk=10 -p tests/vm/page-merge-par:page-merge-par -p tests/vm/child-sort:child-sort --swap-disk=10 | -q   -f run | 'page-merge-par' | tests/vm
-page-merge-stk | --fs-disk=10 -p tests/vm/page-merge-stk:page-merge-stk -p tests/vm/child-qsort:child-qsort --swap-disk=10 | -q   -f run | 'page-merge-stk' | tests/vm
-page-merge-mm | --fs-disk=10 -p tests/vm/page-merge-mm:page-merge-mm -p tests/vm/child-qsort-mm:child-qsort-mm --swap-disk=10 | -q   -f run | 'page-merge-mm' | tests/vm
-page-shuffle | --fs-disk=10 -p tests/vm/page-shuffle:page-shuffle --swap-disk=4 | -q   -f run | 'page-shuffle' | tests/vm
-mmap-read | --fs-disk=10 -p tests/vm/mmap-read:mmap-read -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-read' | tests/vm
-mmap-close | --fs-disk=10 -p tests/vm/mmap-close:mmap-close -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-close' | tests/vm
-mmap-unmap | --fs-disk=10 -p tests/vm/mmap-unmap:mmap-unmap -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-unmap' | tests/vm
-mmap-overlap | --fs-disk=10 -p tests/vm/mmap-overlap:mmap-overlap -p tests/vm/zeros:zeros --swap-disk=4 | -q   -f run | 'mmap-overlap' | tests/vm
-mmap-twice | --fs-disk=10 -p tests/vm/mmap-twice:mmap-twice -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-twice' | tests/vm
-mmap-write | --fs-disk=10 -p tests/vm/mmap-write:mmap-write --swap-disk=4 | -q   -f run | 'mmap-write' | tests/vm
-mmap-ro | --fs-disk=10 -p tests/vm/mmap-ro:mmap-ro -p ../../tests/vm/large.txt:large.txt --swap-disk=4 | -q   -f run | 'mmap-ro' | tests/vm
-mmap-exit | --fs-disk=10 -p tests/vm/mmap-exit:mmap-exit -p tests/vm/child-mm-wrt:child-mm-wrt --swap-disk=4 | -q   -f run | 'mmap-exit' | tests/vm
-mmap-shuffle | --fs-disk=10 -p tests/vm/mmap-shuffle:mmap-shuffle --swap-disk=4 | -q   -f run | 'mmap-shuffle' | tests/vm
-mmap-bad-fd | --fs-disk=10 -p tests/vm/mmap-bad-fd:mmap-bad-fd --swap-disk=4 | -q   -f run | 'mmap-bad-fd' | tests/vm
-mmap-clean | --fs-disk=10 -p tests/vm/mmap-clean:mmap-clean -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-clean' | tests/vm
-mmap-inherit | --fs-disk=10 -p tests/vm/mmap-inherit:mmap-inherit -p ../../tests/vm/sample.txt:sample.txt -p tests/vm/child-inherit:child-inherit --swap-disk=4 | -q   -f run | 'mmap-inherit' | tests/vm
-mmap-misalign | --fs-disk=10 -p tests/vm/mmap-misalign:mmap-misalign -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-misalign' | tests/vm
-mmap-null | --fs-disk=10 -p tests/vm/mmap-null:mmap-null -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-null' | tests/vm
-mmap-over-code | --fs-disk=10 -p tests/vm/mmap-over-code:mmap-over-code -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-over-code' | tests/vm
-mmap-over-data | --fs-disk=10 -p tests/vm/mmap-over-data:mmap-over-data -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-over-data' | tests/vm
-mmap-over-stk | --fs-disk=10 -p tests/vm/mmap-over-stk:mmap-over-stk -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-over-stk' | tests/vm
-mmap-remove | --fs-disk=10 -p tests/vm/mmap-remove:mmap-remove -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-remove' | tests/vm
-mmap-zero | --fs-disk=10 -p tests/vm/mmap-zero:mmap-zero --swap-disk=4 | -q   -f run | 'mmap-zero' | tests/vm
-mmap-bad-fd2 | --fs-disk=10 -p tests/vm/mmap-bad-fd2:mmap-bad-fd2 --swap-disk=4 | -q   -f run | 'mmap-bad-fd2' | tests/vm
-mmap-bad-fd3 | --fs-disk=10 -p tests/vm/mmap-bad-fd3:mmap-bad-fd3 --swap-disk=4 | -q   -f run | 'mmap-bad-fd3' | tests/vm
-mmap-zero-len | --fs-disk=10 -p tests/vm/mmap-zero-len:mmap-zero-len --swap-disk=4 | -q   -f run | 'mmap-zero-len' | tests/vm
-mmap-off | --fs-disk=10 -p tests/vm/mmap-off:mmap-off -p ../../tests/vm/large.txt:large.txt --swap-disk=4 | -q   -f run | 'mmap-off' | tests/vm
-mmap-bad-off | --fs-disk=10 -p tests/vm/mmap-bad-off:mmap-bad-off -p ../../tests/vm/large.txt:large.txt --swap-disk=4 | -q   -f run | 'mmap-bad-off' | tests/vm
-mmap-kernel | --fs-disk=10 -p tests/vm/mmap-kernel:mmap-kernel -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-kernel' | tests/vm
-lazy-file | --fs-disk=10 -p tests/vm/lazy-file:lazy-file -p ../../tests/vm/sample.txt:sample.txt -p ../../tests/vm/small.txt:small.txt --swap-disk=4 | -q   -f run | 'lazy-file' | tests/vm
-lazy-anon | --fs-disk=10 -p tests/vm/lazy-anon:lazy-anon --swap-disk=4 | -q   -f run | 'lazy-anon' | tests/vm
-swap-file | --fs-disk=10 -p tests/vm/swap-file:swap-file -p ../../tests/vm/large.txt:large.txt --swap-disk=10 | -q   -f run | 'swap-file' | tests/vm
-swap-anon | --fs-disk=10 -p tests/vm/swap-anon:swap-anon --swap-disk=30 | -q   -f run | 'swap-anon' | tests/vm
-swap-iter | --fs-disk=10 -p tests/vm/swap-iter:swap-iter -p ../../tests/vm/large.txt:large.txt --swap-disk=50 | -q   -f run | 'swap-iter' | tests/vm
-swap-fork | --fs-disk=10 -p tests/vm/swap-fork:swap-fork -p tests/vm/child-swap:child-swap --swap-disk=200 | -q   -f run | 'swap-fork' | tests/vm
+pt-grow-stack | -m 20 --fs-disk=10 -p tests/vm/pt-grow-stack:pt-grow-stack --swap-disk=4 | -q   -f run | 'pt-grow-stack' | tests/vm
+pt-grow-bad | -m 20 --fs-disk=10 -p tests/vm/pt-grow-bad:pt-grow-bad --swap-disk=4 | -q   -f run | 'pt-grow-bad' | tests/vm
+pt-big-stk-obj | -m 20 --fs-disk=10 -p tests/vm/pt-big-stk-obj:pt-big-stk-obj --swap-disk=4 | -q   -f run | 'pt-big-stk-obj' | tests/vm
+pt-bad-addr | -m 20 --fs-disk=10 -p tests/vm/pt-bad-addr:pt-bad-addr --swap-disk=4 | -q   -f run | 'pt-bad-addr' | tests/vm
+pt-bad-read | -m 20 --fs-disk=10 -p tests/vm/pt-bad-read:pt-bad-read -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'pt-bad-read' | tests/vm
+pt-write-code | -m 20 --fs-disk=10 -p tests/vm/pt-write-code:pt-write-code --swap-disk=4 | -q   -f run | 'pt-write-code' | tests/vm
+pt-write-code2 | -m 20 --fs-disk=10 -p tests/vm/pt-write-code2:pt-write-code2 -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'pt-write-code2' | tests/vm
+pt-grow-stk-sc | -m 20 --fs-disk=10 -p tests/vm/pt-grow-stk-sc:pt-grow-stk-sc --swap-disk=4 | -q   -f run | 'pt-grow-stk-sc' | tests/vm
+page-linear | -m 20 --fs-disk=10 -p tests/vm/page-linear:page-linear --swap-disk=4 | -q   -f run | 'page-linear' | tests/vm
+page-parallel | -m 20 --fs-disk=10 -p tests/vm/page-parallel:page-parallel -p tests/vm/child-linear:child-linear --swap-disk=4 | -q   -f run | 'page-parallel' | tests/vm
+page-merge-seq | -m 20 --fs-disk=10 -p tests/vm/page-merge-seq:page-merge-seq -p tests/vm/child-sort:child-sort --swap-disk=4 | -q   -f run | 'page-merge-seq' | tests/vm
+page-merge-par | -m 20 --fs-disk=10 -p tests/vm/page-merge-par:page-merge-par -p tests/vm/child-sort:child-sort --swap-disk=10 | -q   -f run | 'page-merge-par' | tests/vm
+page-merge-stk | -m 20 --fs-disk=10 -p tests/vm/page-merge-stk:page-merge-stk -p tests/vm/child-qsort:child-qsort --swap-disk=10 | -q   -f run | 'page-merge-stk' | tests/vm
+page-merge-mm | -m 20 --fs-disk=10 -p tests/vm/page-merge-mm:page-merge-mm -p tests/vm/child-qsort-mm:child-qsort-mm --swap-disk=10 | -q   -f run | 'page-merge-mm' | tests/vm
+page-shuffle | -m 20 --fs-disk=10 -p tests/vm/page-shuffle:page-shuffle --swap-disk=4 | -q   -f run | 'page-shuffle' | tests/vm
+mmap-read | -m 20 --fs-disk=10 -p tests/vm/mmap-read:mmap-read -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-read' | tests/vm
+mmap-close | -m 20 --fs-disk=10 -p tests/vm/mmap-close:mmap-close -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-close' | tests/vm
+mmap-unmap | -m 20 --fs-disk=10 -p tests/vm/mmap-unmap:mmap-unmap -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-unmap' | tests/vm
+mmap-overlap | -m 20 --fs-disk=10 -p tests/vm/mmap-overlap:mmap-overlap -p tests/vm/zeros:zeros --swap-disk=4 | -q   -f run | 'mmap-overlap' | tests/vm
+mmap-twice | -m 20 --fs-disk=10 -p tests/vm/mmap-twice:mmap-twice -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-twice' | tests/vm
+mmap-write | -m 20 --fs-disk=10 -p tests/vm/mmap-write:mmap-write --swap-disk=4 | -q   -f run | 'mmap-write' | tests/vm
+mmap-ro | -m 20 --fs-disk=10 -p tests/vm/mmap-ro:mmap-ro -p ../../tests/vm/large.txt:large.txt --swap-disk=4 | -q   -f run | 'mmap-ro' | tests/vm
+mmap-exit | -m 20 --fs-disk=10 -p tests/vm/mmap-exit:mmap-exit -p tests/vm/child-mm-wrt:child-mm-wrt --swap-disk=4 | -q   -f run | 'mmap-exit' | tests/vm
+mmap-shuffle | -m 20 --fs-disk=10 -p tests/vm/mmap-shuffle:mmap-shuffle --swap-disk=4 | -q   -f run | 'mmap-shuffle' | tests/vm
+mmap-bad-fd | -m 20 --fs-disk=10 -p tests/vm/mmap-bad-fd:mmap-bad-fd --swap-disk=4 | -q   -f run | 'mmap-bad-fd' | tests/vm
+mmap-clean | -m 20 --fs-disk=10 -p tests/vm/mmap-clean:mmap-clean -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-clean' | tests/vm
+mmap-inherit | -m 20 --fs-disk=10 -p tests/vm/mmap-inherit:mmap-inherit -p ../../tests/vm/sample.txt:sample.txt -p tests/vm/child-inherit:child-inherit --swap-disk=4 | -q   -f run | 'mmap-inherit' | tests/vm
+mmap-misalign | -m 20 --fs-disk=10 -p tests/vm/mmap-misalign:mmap-misalign -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-misalign' | tests/vm
+mmap-null | -m 20 --fs-disk=10 -p tests/vm/mmap-null:mmap-null -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-null' | tests/vm
+mmap-over-code | -m 20 --fs-disk=10 -p tests/vm/mmap-over-code:mmap-over-code -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-over-code' | tests/vm
+mmap-over-data | -m 20 --fs-disk=10 -p tests/vm/mmap-over-data:mmap-over-data -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-over-data' | tests/vm
+mmap-over-stk | -m 20 --fs-disk=10 -p tests/vm/mmap-over-stk:mmap-over-stk -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-over-stk' | tests/vm
+mmap-remove | -m 20 --fs-disk=10 -p tests/vm/mmap-remove:mmap-remove -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-remove' | tests/vm
+mmap-zero | -m 20 --fs-disk=10 -p tests/vm/mmap-zero:mmap-zero --swap-disk=4 | -q   -f run | 'mmap-zero' | tests/vm
+mmap-bad-fd2 | -m 20 --fs-disk=10 -p tests/vm/mmap-bad-fd2:mmap-bad-fd2 --swap-disk=4 | -q   -f run | 'mmap-bad-fd2' | tests/vm
+mmap-bad-fd3 | -m 20 --fs-disk=10 -p tests/vm/mmap-bad-fd3:mmap-bad-fd3 --swap-disk=4 | -q   -f run | 'mmap-bad-fd3' | tests/vm
+mmap-zero-len | -m 20 --fs-disk=10 -p tests/vm/mmap-zero-len:mmap-zero-len --swap-disk=4 | -q   -f run | 'mmap-zero-len' | tests/vm
+mmap-off | -m 20 --fs-disk=10 -p tests/vm/mmap-off:mmap-off -p ../../tests/vm/large.txt:large.txt --swap-disk=4 | -q   -f run | 'mmap-off' | tests/vm
+mmap-bad-off | -m 20 --fs-disk=10 -p tests/vm/mmap-bad-off:mmap-bad-off -p ../../tests/vm/large.txt:large.txt --swap-disk=4 | -q   -f run | 'mmap-bad-off' | tests/vm
+mmap-kernel | -m 20 --fs-disk=10 -p tests/vm/mmap-kernel:mmap-kernel -p ../../tests/vm/sample.txt:sample.txt --swap-disk=4 | -q   -f run | 'mmap-kernel' | tests/vm
+lazy-file | -m 20 --fs-disk=10 -p tests/vm/lazy-file:lazy-file -p ../../tests/vm/sample.txt:sample.txt -p ../../tests/vm/small.txt:small.txt --swap-disk=4 | -q   -f run | 'lazy-file' | tests/vm
+lazy-anon | -m 20 --fs-disk=10 -p tests/vm/lazy-anon:lazy-anon --swap-disk=4 | -q   -f run | 'lazy-anon' | tests/vm
+swap-file | -m 8 --fs-disk=10 -p tests/vm/swap-file:swap-file -p ../../tests/vm/large.txt:large.txt --swap-disk=10 | -q   -f run | 'swap-file' | tests/vm
+swap-anon | -m 10 --fs-disk=10 -p tests/vm/swap-anon:swap-anon --swap-disk=30 | -q   -f run | 'swap-anon' | tests/vm
+swap-iter | -m 10 --fs-disk=10 -p tests/vm/swap-iter:swap-iter -p ../../tests/vm/large.txt:large.txt --swap-disk=50 | -q   -f run | 'swap-iter' | tests/vm
+swap-fork | -m 40 --fs-disk=10 -p tests/vm/swap-fork:swap-fork -p tests/vm/child-swap:child-swap --swap-disk=200 | -q   -f run | 'swap-fork' | tests/vm
 
 [filesys/base]
 lg-create | --fs-disk=10 -p tests/filesys/base/lg-create:lg-create --swap-disk=4 | -q   -f run | 'lg-create' | tests/filesys/base
@@ -160,4 +160,4 @@ priority-donate-chain | --fs-disk=10 --swap-disk=4 | -q  -threads-tests -f run |
 cow-simple | --fs-disk=10 -p tests/vm/cow/cow-simple:cow-simple --swap-disk=4 | -q   -f run | 'cow-simple' | tests/vm/cow
 
 # Total testcases: 141
-# Generated on 2025-08-05
+# Generated on 2025-08-13

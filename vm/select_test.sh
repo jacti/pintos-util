@@ -88,7 +88,8 @@ fi
 
 if (( REBUILD )); then
   echo "Force rebuilding Pintos vm..."
-  make -C "${SCRIPT_DIR}" clean all
+  make -C "${SCRIPT_DIR}" clean
+  make -C "${SCRIPT_DIR}" all -j$(nproc)
 fi
 
 STATE_FILE="${SCRIPT_DIR}/.test_status"

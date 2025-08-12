@@ -29,15 +29,9 @@ if (( $# == 2 )); then
   fi
 fi
 
-# 스크립트 자신이 있는 디렉터리 (usrprog/)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# 프로젝트 루트에서 Pintos 환경 활성화
 source "${SCRIPT_DIR}/../activate"
 
-# --------------------------------------------------
-# .test_config 읽어서 5-필드로 파싱
-# 형식: 테스트명 | Pre-Args | Post-Args | Prog-Args | Test-Path
-# --------------------------------------------------
 CONFIG_FILE="${SCRIPT_DIR}/.test_config"
 if [[ ! -f "$CONFIG_FILE" ]]; then
   echo "Error: .test_config 파일이 없습니다: ${CONFIG_FILE}" >&2
@@ -55,23 +49,20 @@ tests=()
 current_group=""
 
 while IFS= read -r raw; do
-  # 주석 제거, 앞뒤 공백 trim
   line="${raw%%\#*}"
   line="$(echo "$line" | xargs)"
   [[ -z "$line" ]] && continue
 
   if [[ "$line" =~ ^\[(.+)\]$ ]]; then
-    # [group] 섹션 헤더
     current_group="${BASH_REMATCH[1]}"
     ORDERED_GROUPS+=("$current_group")
     GROUP_TESTS["$current_group"]=""
   else
-    # 5-필드 파싱: test | pre_args | post_args | prog_args | test_path
     IFS='|' read -r test pre_args post_args prog_args test_path <<< "$line"
-    test="$(echo "$test"         | xargs)"
+    test="$(echo "$test"       | xargs)"
     pre_args="$(echo "$pre_args"   | xargs)"
     post_args="$(echo "$post_args" | xargs)"
-    prog_args="$(echo "$prog_args" | xargs)"   # 따옴표 포함된 상태 유지
+    prog_args="$(echo "$prog_args" | xargs)"
     test_path="$(echo "$test_path" | xargs)"
 
     config_pre_args["$test"]="$pre_args"
@@ -80,35 +71,30 @@ while IFS= read -r raw; do
     config_result["$test"]="$test_path"
     tests+=("$test")
 
-    # 그룹에 추가
     TEST_GROUP["$test"]="$current_group"
     GROUP_TESTS["$current_group"]+="$test "
   fi
 done < "$CONFIG_FILE"
 
-# --- 그룹별 테스트 모음 생성 ---
 for test in "${tests[@]}"; do
   grp="${config_result[$test]}"
   GROUP_TESTS["$grp"]+="$test "
 done
 
-
-# 1) build/ 폴더가 없으면 무조건 처음 빌드
 if [[ ! -d "${SCRIPT_DIR}/build" ]]; then
-  echo "Build directory not found. Building Pintos userprog..."
+  echo "Build directory not found. Building Pintos vm..."
   make -C "${SCRIPT_DIR}" clean all
 fi
 
-# 2) -r 옵션이 있으면 clean & rebuild
 if (( REBUILD )); then
-  echo "Force rebuilding Pintos userprog..."
-  make -C "${SCRIPT_DIR}" clean all
+  echo "Force rebuilding Pintos vm..."
+  make -C "${SCRIPT_DIR}" clean
+  make -C "${SCRIPT_DIR}" all -j$(nproc)
 fi
 
 STATE_FILE="${SCRIPT_DIR}/.test_status"
 declare -A status_map
 
-# 파일이 있으면 한 줄씩 읽어 넣기
 if [[ -f "$STATE_FILE" ]]; then
   while read -r test stat; do
     status_map["$test"]="$stat"
@@ -136,8 +122,6 @@ for grp in "${ORDERED_GROUPS[@]}"; do
   done
 done
 
-
-# 2) 사용자 선택 (여러 개 / 범위 허용)
 read -p "Enter test numbers (e.g. '1 3 5' or '2-4'): " input
 tokens=()
 for tok in ${input//,/ }; do
@@ -167,7 +151,6 @@ done
 
 echo "Selected tests: ${sel_tests[*]}"
 
-# 3) 순차 실행 및 결과 집계
 passed=()
 failed=()
 {
@@ -177,36 +160,30 @@ failed=()
   total=${#sel_tests[@]}
   for test in "${sel_tests[@]}"; do
     echo
-    # 5-필드 포맷에서 각 args 가져오기
-    pre_args="${config_pre_args[$test]}"    # -- 이전 인자들
-    post_args="${config_post_args[$test]}"  # -- 이후 run 이전 인자들
-    prog_args="${config_prog_args[$test]}"  # '…' 로 묶인 프로그램 + 인자 전체
+    pre_args="${config_pre_args[$test]}"
+    post_args="${config_post_args[$test]}"
+    prog_args="${config_prog_args[$test]}"
     dir="${config_result[$test]}"
     res="${dir}/${test}.result"
 
     mkdir -p ${dir}
     
     if [[ "$MODE" == "-q" ]]; then
-      # 배치 모드
       cmd="pintos ${pre_args} -- ${post_args} '${prog_args}'"
       echo "Running ${test} in batch mode... "
-      echo "\$ ${cmd}  # in batch mode"
+      echo "\$ ${cmd}"
       echo
-      # batch 모드: ARGS 전달
       if make -s ${res} \
             ARGS="${pre_args} -- ${post_args} '${prog_args}'"; then
-        # make가 성공했으면 .result 안에 PASS 키워드 검사
         if grep -q '^PASS' ${res}; then
           echo "PASS"; passed+=("$test")
         else
           echo "FAIL"; failed+=("$test")
         fi
       else
-        # make가 실패했어도 그냥 FAIL로 처리
         echo "FAIL"; failed+=("$test")
-fi
+      fi
     else
-      # interactive debug 모드: QEMU 포그라운드 실행 + tee 로 .output 캡처 후 .result 생성
       echo -e "=== Debugging \e[33m${test}\e[0m ($(( count + 1 ))/${total}) ==="
       echo -e "\e[33mVSCode의 \"Pintos Debug\" 디버그를 시작하세요.\e[0m"
       echo " * QEMU 창이 뜨고, gdb stub은 localhost:1234 에서 대기합니다."
@@ -217,8 +194,7 @@ fi
       echo "\$ ${cmd}"
       eval "${cmd}" 2>&1 | tee "${dir}/${test}.output"
 
-      # 종료 후 체크 스크립트로 .result 생성
-      repo_root="${SCRIPT_DIR}/.."   # 리포지터리 루트(pintos/) 경로
+      repo_root="${SCRIPT_DIR}/.."
       ck="${repo_root}/${dir}/${test}.ck"
       if [[ -f "$ck" ]]; then
         perl -I "${repo_root}" \
@@ -234,13 +210,11 @@ fi
       echo "=== ${test} session end ==="
     fi
 
-    # 진행 현황 표시: 노란색으로 total i/n 출력
     ((count++))
     echo -e "\e[33mtest ${count}/${total} finish\e[0m"
   done
 }
 
-# 4) 요약 출력
 echo
 echo "=== Test Summary ==="
 echo "Passed: ${#passed[@]}"
@@ -248,7 +222,6 @@ for t in "${passed[@]}"; do echo "  - $t"; done
 echo "Failed: ${#failed[@]}"
 for t in "${failed[@]}"; do echo "  - $t"; done
 
-# 5) 상태 파일에 PASS/FAIL 기록 (untested는 기록하지 않음)
 for t in "${passed[@]}"; do
   status_map["$t"]="PASS"
 done
