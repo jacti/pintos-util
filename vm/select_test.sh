@@ -48,22 +48,145 @@ tests=()
 
 current_group=""
 
-while IFS= read -r raw; do
+# ---- Progress UI utilities ----
+SPINNER_PID=""
+start_spinner() {
+  # 사용법: start_spinner "메시지"
+  local msg="$1"
+  local chars='|/-\'
+  local i=0
+  # 커서 숨김
+  tput civis 2>/dev/null || true
+  # 백그라운드 스피너
+  (
+    while true; do
+      printf "\r%s %s" "$msg" "${chars:i++%${#chars}:1}"
+      sleep 0.1
+    done
+  ) &
+  SPINNER_PID=$!
+}
+
+stop_spinner() {
+  # 사용법: stop_spinner [최종메시지]
+  local final="${1:-}"
+  if [[ -n "$SPINNER_PID" ]]; then
+    kill "$SPINNER_PID" 2>/dev/null || true
+    wait "$SPINNER_PID" 2>/dev/null || true
+    SPINNER_PID=""
+  fi
+  # 현재 줄 지우고 커서 복원
+  printf "\r\033[2K"
+  tput cnorm 2>/dev/null || true
+  [[ -n "$final" ]] && echo "$final"
+}
+# 비정상 종료에도 커서 복원
+trap 'stop_spinner >/dev/null 2>&1 || true' EXIT
+
+# ---- Build helper (로그 캡처 + 경고/에러 파싱) ----
+BUILD_LOG=""
+BUILD_WARNINGS=""
+BUILD_ERRORS=""
+
+run_build() {
+  # 사용법: run_build "Build" | "Rebuild"
+  local label="$1"
+  BUILD_LOG="$(mktemp)"
+  start_spinner "${label}ing Pintos vm..."
+  {
+    make -C "${SCRIPT_DIR}" clean
+    make -C "${SCRIPT_DIR}" all -j"$(nproc)"
+  } &> "$BUILD_LOG"
+  local status=$?
+  stop_spinner
+
+  # 경고/에러 추출 (중복 제거)
+  if grep -qi "warning:" "$BUILD_LOG"; then
+    BUILD_WARNINGS="$(grep -i 'warning:' "$BUILD_LOG" | sed 's/^[[:space:]]*//' | sort -u)"
+  else
+    BUILD_WARNINGS=""
+  fi
+  if grep -qi "error:" "$BUILD_LOG"; then
+    BUILD_ERRORS="$(grep -i 'error:' "$BUILD_LOG" | sed 's/^[[:space:]]*//' | sort -u)"
+  else
+    BUILD_ERRORS=""
+  fi
+
+  return $status
+}
+
+# 빌드 실패 시 출력 유틸
+print_build_diagnostics_and_exit() {
+  echo
+  echo "====== MAKE DIAGNOSTICS ======"
+  [[ -n "$BUILD_WARNINGS" ]] && { echo "[Warnings]"; echo "$BUILD_WARNINGS"; echo; }
+  if [[ -n "$BUILD_ERRORS" ]]; then
+    echo "[Errors]"
+    echo "$BUILD_ERRORS"
+  else
+    echo "[Errors] (pattern 'error:'가 없는 실패 — 전체 로그의 마지막 80줄)"
+    tail -n 80 "$BUILD_LOG"
+  fi
+  echo "Full build log: $BUILD_LOG"
+  exit 1
+}
+
+# --- xargs와 동일한 정규화: 트림 + 공백 접기 + 양끝 작은따옴표 제거 ---
+canon() {
+  # 1) 숨은 문자 제거
+  local s=${1%$'\r'}                                   # CR
+  s="${s#$'\xEF\xBB\xBF'}"                             # BOM
+  s="${s//$'\xC2\xA0'/ }"                              # NBSP -> space
+  s="${s//$'\xE2\x80\x8B'/}"                           # ZWSP 제거
+
+  # 2) xargs처럼: IFS 공백 기준으로 토큰화 후 다시 합치기(앞뒤/연속 공백 접힘)
+  local -a a
+  IFS=$' \t\n' read -r -a a <<< "$s"
+  s="${a[*]}"                                          # 토큰들 사이에 단일 스페이스로 join
+
+  # 3) 양끝 작은따옴표가 둘다 있으면 제거 (xargs는 따옴표를 구분자로 봄)
+  if [[ ${#s} -ge 2 && ${s:0:1} == "'" && ${s: -1} == "'" ]]; then
+    s="${s:1:-1}"
+  fi
+  printf '%s' "$s"
+}
+
+# --- 파일을 한 번에 읽고(바인드 마운트 I/O 최소화) 동일 로직으로 파싱 ---
+mapfile -t _lines < "$CONFIG_FILE"
+
+# 진행표시: 전체 줄 수와 유효 라인 수는 루프에서 세자 (외부 명령 안 씀)
+total_lines=${#_lines[@]}
+parsed_lines=0
+parsed_tests=0
+parsed_groups=0
+seen_groups=()  # 그룹 수 세기용 (연관배열 안 써도 OK)
+
+# 진행 헤더 한 줄
+echo "Parsing .test_config ..."
+
+current_group=""
+for raw in "${_lines[@]}"; do
+  # 원본과 동일: '#' 이후는 주석으로 잘라냄 (따옴표 안이라도 자름)
   line="${raw%%\#*}"
-  line="$(echo "$line" | xargs)"
-  [[ -z "$line" ]] && continue
+  line="$(canon "$line")"
+  [[ -z "$line" ]] && { ((parsed_lines++)); printf "\rParsing: %d/%d" "$parsed_lines" "$total_lines"; continue; }
 
   if [[ "$line" =~ ^\[(.+)\]$ ]]; then
     current_group="${BASH_REMATCH[1]}"
     ORDERED_GROUPS+=("$current_group")
     GROUP_TESTS["$current_group"]=""
+    # 그룹 카운트 (중복 방지 간단 처리)
+    found=0
+    for g in "${seen_groups[@]}"; do [[ "$g" == "$current_group" ]] && { found=1; break; }; done
+    (( found == 0 )) && { seen_groups+=("$current_group"); ((parsed_groups++)); }
   else
     IFS='|' read -r test pre_args post_args prog_args test_path <<< "$line"
-    test="$(echo "$test"       | xargs)"
-    pre_args="$(echo "$pre_args"   | xargs)"
-    post_args="$(echo "$post_args" | xargs)"
-    prog_args="$(echo "$prog_args" | xargs)"
-    test_path="$(echo "$test_path" | xargs)"
+    test="$(canon "$test")"
+    pre_args="$(canon "$pre_args")"
+    post_args="$(canon "$post_args")"
+    prog_args="$(canon "$prog_args")"
+    test_path="$(canon "$test_path")"
+    [[ -z "$test" ]] && { ((parsed_lines++)); printf "\rParsing: %d/%d" "$parsed_lines" "$total_lines"; continue; }
 
     config_pre_args["$test"]="$pre_args"
     config_post_args["$test"]="$post_args"
@@ -73,8 +196,22 @@ while IFS= read -r raw; do
 
     TEST_GROUP["$test"]="$current_group"
     GROUP_TESTS["$current_group"]+="$test "
+    ((parsed_tests++))
   fi
-done < "$CONFIG_FILE"
+
+  ((parsed_lines++))
+  # 너무 자주 찍으면 느려질 수 있어 5줄마다 한번씩 업데이트
+  if (( parsed_lines % 5 == 0 || parsed_lines == total_lines )); then
+    printf "\rParsing: %d/%d (groups: %d, tests: %d)" \
+      "$parsed_lines" "$total_lines" "$parsed_groups" "$parsed_tests"
+  else
+    printf "\rParsing: %d/%d" "$parsed_lines" "$total_lines"
+  fi
+done
+
+# 파싱 완료 라인
+printf "\r\033[2K"   # 진행줄 지우기
+echo "Parsed groups: $parsed_groups, tests: $parsed_tests"
 
 for test in "${tests[@]}"; do
   grp="${config_result[$test]}"
@@ -82,15 +219,24 @@ for test in "${tests[@]}"; do
 done
 
 if [[ ! -d "${SCRIPT_DIR}/build" ]]; then
-  echo "Build directory not found. Building Pintos vm..."
-  make -C "${SCRIPT_DIR}" clean all
+  if run_build "Build"; then
+    echo "Build complete."
+    REBUILD=0
+  else
+    echo "Build failed."
+    print_build_diagnostics_and_exit
+  fi
 fi
 
 if (( REBUILD )); then
-  echo "Force rebuilding Pintos vm..."
-  make -C "${SCRIPT_DIR}" clean
-  make -C "${SCRIPT_DIR}" all -j$(nproc)
+  if run_build "Rebuild"; then
+    echo "Rebuild complete."
+  else
+    echo "Rebuild failed."
+    print_build_diagnostics_and_exit
+  fi
 fi
+
 
 STATE_FILE="${SCRIPT_DIR}/.test_status"
 declare -A status_map
