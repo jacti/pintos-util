@@ -1,0 +1,165 @@
+# .test_config format:
+# test_name | pre_args | post_args | prog_args | test_path
+#
+# Fields:
+#   test_name : 테스트 식별용 이름
+#   pre_args  : 'pintos' 호출 시 -- 이전 옵션들
+#   post_args : 'pintos' 호출 시 -- 이후, run 이전 옵션들
+#   prog_args : 작은따옴표로 묶인 테스트 실행 인자 전체
+#   test_path : 테스트 바이너리 경로 (호스트 파일 시스템 내)
+
+[userprog]
+args-none | --fs-disk=10 -p tests/userprog/args-none:args-none | -q   -f run | 'args-none' | tests/userprog
+args-single | --fs-disk=10 -p tests/userprog/args-single:args-single | -q   -f run | 'args-single onearg' | tests/userprog
+args-multiple | --fs-disk=10 -p tests/userprog/args-multiple:args-multiple | -q   -f run | 'args-multiple some arguments for you!' | tests/userprog
+args-many | --fs-disk=10 -p tests/userprog/args-many:args-many | -q   -f run | 'args-many a b c d e f g h i j k l m n o p q r s t u v' | tests/userprog
+args-dbl-space | --fs-disk=10 -p tests/userprog/args-dbl-space:args-dbl-space | -q   -f run | 'args-dbl-space two  spaces!' | tests/userprog
+halt | --fs-disk=10 -p tests/userprog/halt:halt | -q   -f run | 'halt' | tests/userprog
+exit | --fs-disk=10 -p tests/userprog/exit:exit | -q   -f run | 'exit' | tests/userprog
+create-normal | --fs-disk=10 -p tests/userprog/create-normal:create-normal | -q   -f run | 'create-normal' | tests/userprog
+create-empty | --fs-disk=10 -p tests/userprog/create-empty:create-empty | -q   -f run | 'create-empty' | tests/userprog
+create-null | --fs-disk=10 -p tests/userprog/create-null:create-null | -q   -f run | 'create-null' | tests/userprog
+create-bad-ptr | --fs-disk=10 -p tests/userprog/create-bad-ptr:create-bad-ptr | -q   -f run | 'create-bad-ptr' | tests/userprog
+create-long | --fs-disk=10 -p tests/userprog/create-long:create-long | -q   -f run | 'create-long' | tests/userprog
+create-exists | --fs-disk=10 -p tests/userprog/create-exists:create-exists | -q   -f run | 'create-exists' | tests/userprog
+create-bound | --fs-disk=10 -p tests/userprog/create-bound:create-bound | -q   -f run | 'create-bound' | tests/userprog
+open-normal | --fs-disk=10 -p tests/userprog/open-normal:open-normal -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'open-normal' | tests/userprog
+open-missing | --fs-disk=10 -p tests/userprog/open-missing:open-missing | -q   -f run | 'open-missing' | tests/userprog
+open-boundary | --fs-disk=10 -p tests/userprog/open-boundary:open-boundary -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'open-boundary' | tests/userprog
+open-empty | --fs-disk=10 -p tests/userprog/open-empty:open-empty | -q   -f run | 'open-empty' | tests/userprog
+open-null | --fs-disk=10 -p tests/userprog/open-null:open-null | -q   -f run | 'open-null' | tests/userprog
+open-bad-ptr | --fs-disk=10 -p tests/userprog/open-bad-ptr:open-bad-ptr | -q   -f run | 'open-bad-ptr' | tests/userprog
+open-twice | --fs-disk=10 -p tests/userprog/open-twice:open-twice -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'open-twice' | tests/userprog
+close-normal | --fs-disk=10 -p tests/userprog/close-normal:close-normal -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'close-normal' | tests/userprog
+close-twice | --fs-disk=10 -p tests/userprog/close-twice:close-twice -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'close-twice' | tests/userprog
+close-bad-fd | --fs-disk=10 -p tests/userprog/close-bad-fd:close-bad-fd | -q   -f run | 'close-bad-fd' | tests/userprog
+read-normal | --fs-disk=10 -p tests/userprog/read-normal:read-normal -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'read-normal' | tests/userprog
+read-bad-ptr | --fs-disk=10 -p tests/userprog/read-bad-ptr:read-bad-ptr -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'read-bad-ptr' | tests/userprog
+read-boundary | --fs-disk=10 -p tests/userprog/read-boundary:read-boundary -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'read-boundary' | tests/userprog
+read-zero | --fs-disk=10 -p tests/userprog/read-zero:read-zero -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'read-zero' | tests/userprog
+read-stdout | --fs-disk=10 -p tests/userprog/read-stdout:read-stdout | -q   -f run | 'read-stdout' | tests/userprog
+read-bad-fd | --fs-disk=10 -p tests/userprog/read-bad-fd:read-bad-fd | -q   -f run | 'read-bad-fd' | tests/userprog
+write-normal | --fs-disk=10 -p tests/userprog/write-normal:write-normal -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'write-normal' | tests/userprog
+write-bad-ptr | --fs-disk=10 -p tests/userprog/write-bad-ptr:write-bad-ptr -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'write-bad-ptr' | tests/userprog
+write-boundary | --fs-disk=10 -p tests/userprog/write-boundary:write-boundary -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'write-boundary' | tests/userprog
+write-zero | --fs-disk=10 -p tests/userprog/write-zero:write-zero -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'write-zero' | tests/userprog
+write-stdin | --fs-disk=10 -p tests/userprog/write-stdin:write-stdin | -q   -f run | 'write-stdin' | tests/userprog
+write-bad-fd | --fs-disk=10 -p tests/userprog/write-bad-fd:write-bad-fd | -q   -f run | 'write-bad-fd' | tests/userprog
+fork-once | --fs-disk=10 -p tests/userprog/fork-once:fork-once | -q   -f run | 'fork-once' | tests/userprog
+fork-multiple | --fs-disk=10 -p tests/userprog/fork-multiple:fork-multiple | -q   -f run | 'fork-multiple' | tests/userprog
+fork-recursive | --fs-disk=10 -p tests/userprog/fork-recursive:fork-recursive | -q   -f run | 'fork-recursive' | tests/userprog
+fork-read | --fs-disk=10 -p tests/userprog/fork-read:fork-read -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'fork-read' | tests/userprog
+fork-close | --fs-disk=10 -p tests/userprog/fork-close:fork-close -p ../../tests/userprog/sample.txt:sample.txt | -q   -f run | 'fork-close' | tests/userprog
+fork-boundary | --fs-disk=10 -p tests/userprog/fork-boundary:fork-boundary | -q   -f run | 'fork-boundary' | tests/userprog
+exec-once | --fs-disk=10 -p tests/userprog/exec-once:exec-once -p tests/userprog/child-simple:child-simple | -q   -f run | 'exec-once' | tests/userprog
+exec-arg | --fs-disk=10 -p tests/userprog/exec-arg:exec-arg -p tests/userprog/child-args:child-args | -q   -f run | 'exec-arg' | tests/userprog
+exec-boundary | --fs-disk=10 -p tests/userprog/exec-boundary:exec-boundary -p tests/userprog/child-simple:child-simple | -q   -f run | 'exec-boundary' | tests/userprog
+exec-missing | --fs-disk=10 -p tests/userprog/exec-missing:exec-missing | -q   -f run | 'exec-missing' | tests/userprog
+exec-bad-ptr | --fs-disk=10 -p tests/userprog/exec-bad-ptr:exec-bad-ptr | -q   -f run | 'exec-bad-ptr' | tests/userprog
+exec-read | --fs-disk=10 -p tests/userprog/exec-read:exec-read -p ../../tests/userprog/sample.txt:sample.txt -p tests/userprog/child-read:child-read | -q   -f run | 'exec-read' | tests/userprog
+wait-simple | --fs-disk=10 -p tests/userprog/wait-simple:wait-simple -p tests/userprog/child-simple:child-simple | -q   -f run | 'wait-simple' | tests/userprog
+wait-twice | --fs-disk=10 -p tests/userprog/wait-twice:wait-twice -p tests/userprog/child-simple:child-simple | -q   -f run | 'wait-twice' | tests/userprog
+wait-killed | --fs-disk=10 -p tests/userprog/wait-killed:wait-killed -p tests/userprog/child-bad:child-bad | -q   -f run | 'wait-killed' | tests/userprog
+wait-bad-pid | --fs-disk=10 -p tests/userprog/wait-bad-pid:wait-bad-pid | -q   -f run | 'wait-bad-pid' | tests/userprog
+multi-recurse | --fs-disk=10 -p tests/userprog/multi-recurse:multi-recurse | -q   -f run | 'multi-recurse 15' | tests/userprog
+multi-child-fd | --fs-disk=10 -p tests/userprog/multi-child-fd:multi-child-fd -p ../../tests/userprog/sample.txt:sample.txt -p tests/userprog/child-close:child-close | -q   -f run | 'multi-child-fd' | tests/userprog
+rox-simple | --fs-disk=10 -p tests/userprog/rox-simple:rox-simple | -q   -f run | 'rox-simple' | tests/userprog
+rox-child | --fs-disk=10 -p tests/userprog/rox-child:rox-child -p tests/userprog/child-rox:child-rox | -q   -f run | 'rox-child' | tests/userprog
+rox-multichild | --fs-disk=10 -p tests/userprog/rox-multichild:rox-multichild -p tests/userprog/child-rox:child-rox | -q   -f run | 'rox-multichild' | tests/userprog
+bad-read | --fs-disk=10 -p tests/userprog/bad-read:bad-read | -q   -f run | 'bad-read' | tests/userprog
+bad-write | --fs-disk=10 -p tests/userprog/bad-write:bad-write | -q   -f run | 'bad-write' | tests/userprog
+bad-read2 | --fs-disk=10 -p tests/userprog/bad-read2:bad-read2 | -q   -f run | 'bad-read2' | tests/userprog
+bad-write2 | --fs-disk=10 -p tests/userprog/bad-write2:bad-write2 | -q   -f run | 'bad-write2' | tests/userprog
+bad-jump | --fs-disk=10 -p tests/userprog/bad-jump:bad-jump | -q   -f run | 'bad-jump' | tests/userprog
+bad-jump2 | --fs-disk=10 -p tests/userprog/bad-jump2:bad-jump2 | -q   -f run | 'bad-jump2' | tests/userprog
+
+[filesys/base]
+lg-create | --fs-disk=10 -p tests/filesys/base/lg-create:lg-create | -q   -f run | 'lg-create' | tests/filesys/base
+lg-full | --fs-disk=10 -p tests/filesys/base/lg-full:lg-full | -q   -f run | 'lg-full' | tests/filesys/base
+lg-random | --fs-disk=10 -p tests/filesys/base/lg-random:lg-random | -q   -f run | 'lg-random' | tests/filesys/base
+lg-seq-block | --fs-disk=10 -p tests/filesys/base/lg-seq-block:lg-seq-block | -q   -f run | 'lg-seq-block' | tests/filesys/base
+lg-seq-random | --fs-disk=10 -p tests/filesys/base/lg-seq-random:lg-seq-random | -q   -f run | 'lg-seq-random' | tests/filesys/base
+sm-create | --fs-disk=10 -p tests/filesys/base/sm-create:sm-create | -q   -f run | 'sm-create' | tests/filesys/base
+sm-full | --fs-disk=10 -p tests/filesys/base/sm-full:sm-full | -q   -f run | 'sm-full' | tests/filesys/base
+sm-random | --fs-disk=10 -p tests/filesys/base/sm-random:sm-random | -q   -f run | 'sm-random' | tests/filesys/base
+sm-seq-block | --fs-disk=10 -p tests/filesys/base/sm-seq-block:sm-seq-block | -q   -f run | 'sm-seq-block' | tests/filesys/base
+sm-seq-random | --fs-disk=10 -p tests/filesys/base/sm-seq-random:sm-seq-random | -q   -f run | 'sm-seq-random' | tests/filesys/base
+syn-read | --fs-disk=10 -p tests/filesys/base/syn-read:syn-read -p tests/filesys/base/child-syn-read:child-syn-read | -q   -f run | 'syn-read' | tests/filesys/base
+syn-remove | --fs-disk=10 -p tests/filesys/base/syn-remove:syn-remove | -q   -f run | 'syn-remove' | tests/filesys/base
+syn-write | --fs-disk=10 -p tests/filesys/base/syn-write:syn-write -p tests/filesys/base/child-syn-wrt:child-syn-wrt | -q   -f run | 'syn-write' | tests/filesys/base
+
+[filesys/extended]
+dir-empty-name | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-empty-name:dir-empty-name -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-empty-name' | tests/filesys/extended
+dir-mk-tree | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-mk-tree:dir-mk-tree -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-mk-tree' | tests/filesys/extended
+dir-mkdir | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-mkdir:dir-mkdir -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-mkdir' | tests/filesys/extended
+dir-open | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-open:dir-open -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-open' | tests/filesys/extended
+dir-over-file | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-over-file:dir-over-file -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-over-file' | tests/filesys/extended
+dir-rm-cwd | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-rm-cwd:dir-rm-cwd -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-rm-cwd' | tests/filesys/extended
+dir-rm-parent | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-rm-parent:dir-rm-parent -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-rm-parent' | tests/filesys/extended
+dir-rm-root | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-rm-root:dir-rm-root -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-rm-root' | tests/filesys/extended
+dir-rm-tree | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-rm-tree:dir-rm-tree -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-rm-tree' | tests/filesys/extended
+dir-rmdir | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-rmdir:dir-rmdir -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-rmdir' | tests/filesys/extended
+dir-under-file | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-under-file:dir-under-file -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-under-file' | tests/filesys/extended
+dir-vine | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-vine:dir-vine -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-vine' | tests/filesys/extended
+grow-create | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-create:grow-create -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-create' | tests/filesys/extended
+grow-dir-lg | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-dir-lg:grow-dir-lg -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-dir-lg' | tests/filesys/extended
+grow-file-size | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-file-size:grow-file-size -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-file-size' | tests/filesys/extended
+grow-root-lg | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-root-lg:grow-root-lg -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-root-lg' | tests/filesys/extended
+grow-root-sm | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-root-sm:grow-root-sm -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-root-sm' | tests/filesys/extended
+grow-seq-lg | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-seq-lg:grow-seq-lg -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-seq-lg' | tests/filesys/extended
+grow-seq-sm | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-seq-sm:grow-seq-sm -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-seq-sm' | tests/filesys/extended
+grow-sparse | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-sparse:grow-sparse -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-sparse' | tests/filesys/extended
+grow-tell | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-tell:grow-tell -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-tell' | tests/filesys/extended
+grow-two-files | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-two-files:grow-two-files -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-two-files' | tests/filesys/extended
+syn-rw | --fs-disk=tmp.dsk -p tests/filesys/extended/syn-rw:syn-rw -p tests/filesys/extended/tar:tar -p tests/filesys/extended/child-syn-rw:child-syn-rw | -q   -f run | 'syn-rw' | tests/filesys/extended
+symlink-file | --fs-disk=tmp.dsk -p tests/filesys/extended/symlink-file:symlink-file -p tests/filesys/extended/tar:tar | -q   -f run | 'symlink-file' | tests/filesys/extended
+symlink-dir | --fs-disk=tmp.dsk -p tests/filesys/extended/symlink-dir:symlink-dir -p tests/filesys/extended/tar:tar | -q   -f run | 'symlink-dir' | tests/filesys/extended
+symlink-link | --fs-disk=tmp.dsk -p tests/filesys/extended/symlink-link:symlink-link -p tests/filesys/extended/tar:tar | -q   -f run | 'symlink-link' | tests/filesys/extended
+dir-empty-name-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-empty-name:dir-empty-name -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-empty-name-persistence' | tests/filesys/extended
+dir-mk-tree-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-mk-tree:dir-mk-tree -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-mk-tree-persistence' | tests/filesys/extended
+dir-mkdir-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-mkdir:dir-mkdir -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-mkdir-persistence' | tests/filesys/extended
+dir-open-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-open:dir-open -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-open-persistence' | tests/filesys/extended
+dir-over-file-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-over-file:dir-over-file -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-over-file-persistence' | tests/filesys/extended
+dir-rm-cwd-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-rm-cwd:dir-rm-cwd -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-rm-cwd-persistence' | tests/filesys/extended
+dir-rm-parent-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-rm-parent:dir-rm-parent -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-rm-parent-persistence' | tests/filesys/extended
+dir-rm-root-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-rm-root:dir-rm-root -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-rm-root-persistence' | tests/filesys/extended
+dir-rm-tree-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-rm-tree:dir-rm-tree -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-rm-tree-persistence' | tests/filesys/extended
+dir-rmdir-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-rmdir:dir-rmdir -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-rmdir-persistence' | tests/filesys/extended
+dir-under-file-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-under-file:dir-under-file -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-under-file-persistence' | tests/filesys/extended
+dir-vine-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/dir-vine:dir-vine -p tests/filesys/extended/tar:tar | -q   -f run | 'dir-vine-persistence' | tests/filesys/extended
+grow-create-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-create:grow-create -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-create-persistence' | tests/filesys/extended
+grow-dir-lg-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-dir-lg:grow-dir-lg -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-dir-lg-persistence' | tests/filesys/extended
+grow-file-size-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-file-size:grow-file-size -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-file-size-persistence' | tests/filesys/extended
+grow-root-lg-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-root-lg:grow-root-lg -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-root-lg-persistence' | tests/filesys/extended
+grow-root-sm-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-root-sm:grow-root-sm -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-root-sm-persistence' | tests/filesys/extended
+grow-seq-lg-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-seq-lg:grow-seq-lg -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-seq-lg-persistence' | tests/filesys/extended
+grow-seq-sm-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-seq-sm:grow-seq-sm -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-seq-sm-persistence' | tests/filesys/extended
+grow-sparse-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-sparse:grow-sparse -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-sparse-persistence' | tests/filesys/extended
+grow-tell-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-tell:grow-tell -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-tell-persistence' | tests/filesys/extended
+grow-two-files-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/grow-two-files:grow-two-files -p tests/filesys/extended/tar:tar | -q   -f run | 'grow-two-files-persistence' | tests/filesys/extended
+symlink-dir-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/symlink-dir:symlink-dir -p tests/filesys/extended/tar:tar | -q   -f run | 'symlink-dir-persistence' | tests/filesys/extended
+symlink-file-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/symlink-file:symlink-file -p tests/filesys/extended/tar:tar | -q   -f run | 'symlink-file-persistence' | tests/filesys/extended
+symlink-link-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/symlink-link:symlink-link -p tests/filesys/extended/tar:tar | -q   -f run | 'symlink-link-persistence' | tests/filesys/extended
+syn-rw-persistence | --fs-disk=tmp.dsk -p tests/filesys/extended/syn-rw:syn-rw -p tests/filesys/extended/tar:tar -p tests/filesys/extended/child-syn-rw:child-syn-rw | -q   -f run | 'syn-rw-persistence' | tests/filesys/extended
+[threads]
+
+alarm-multiple | --fs-disk=10 | -q   -threads-tests -f run | 'alarm-multiple' | tests/threads
+alarm-negative | --fs-disk=10 | -q   -threads-tests -f run | 'alarm-negative' | tests/threads
+alarm-priority | --fs-disk=10 | -q   -threads-tests -f run | 'alarm-priority' | tests/threads
+alarm-simultaneous | --fs-disk=10 | -q   -threads-tests -f run | 'alarm-simultaneous' | tests/threads
+alarm-single | --fs-disk=10 | -q   -threads-tests -f run | 'alarm-single' | tests/threads
+alarm-zero | --fs-disk=10 | -q   -threads-tests -f run | 'alarm-zero' | tests/threads
+priority-change | --fs-disk=10 | -q   -threads-tests -f run | 'priority-change' | tests/threads
+priority-condvar | --fs-disk=10 | -q   -threads-tests -f run | 'priority-condvar' | tests/threads
+priority-donate-chain | --fs-disk=10 | -q   -threads-tests -f run | 'priority-donate-chain' | tests/threads
+priority-donate-lower | --fs-disk=10 | -q   -threads-tests -f run | 'priority-donate-lower' | tests/threads
+priority-donate-multiple | --fs-disk=10 | -q   -threads-tests -f run | 'priority-donate-multiple' | tests/threads
+priority-donate-multiple2 | --fs-disk=10 | -q   -threads-tests -f run | 'priority-donate-multiple2' | tests/threads
+priority-donate-nest | --fs-disk=10 | -q   -threads-tests -f run | 'priority-donate-nest' | tests/threads
+priority-donate-one | --fs-disk=10 | -q   -threads-tests -f run | 'priority-donate-one' | tests/threads
+priority-donate-sema | --fs-disk=10 | -q   -threads-tests -f run | 'priority-donate-sema' | tests/threads
+priority-fifo | --fs-disk=10 | -q   -threads-tests -f run | 'priority-fifo' | tests/threads
+priority-preempt | --fs-disk=10 | -q   -threads-tests -f run | 'priority-preempt' | tests/threads
+priority-sema | --fs-disk=10 | -q   -threads-tests -f run | 'priority-sema' | tests/threads
+# Total testcases: 146
+# Generated on 2025-10-14
